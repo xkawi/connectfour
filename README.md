@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ### Set up Nitrous.IO Node.js Box
 1. If you have a Python Box, terminate it, OR create another Nitrous.IO account for Node.js
 2. Follow the [SSH Lab](https://docs.google.com/a/smu.edu.sg/document/d/15_1Ic9ysOgr2ZHWVKbEZEm2cGMXDtniYka2YY0IfZQ0) to create an SSH key pair for this box
@@ -45,3 +46,9 @@ For for information on application development in the Cloud, including AngularJS
 
 
 ### View the GameBots demo app [here](http://gamebots-env-hrrxxujvrm.elasticbeanstalk.com/index.html)
+=======
+connectfour
+===========
+
+connectfour app for cloud computing
+>>>>>>> bae63ab12ea3574eec01f70fb173198501f6e678
