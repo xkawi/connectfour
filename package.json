@@ -1,12 +1,16 @@
 {
-  "name": "application-name",
+  "name": "cloud4",
+  "description": "Connect4 Game called 'cloud4' - a Cloud Computing Module Project",
   "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node app"
-  },
   "dependencies": {
-    "express": "3.0.0rc4",
-    "jade": "*"
+    "restify": "2.4.x",
+    "firebase": "*"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "scripts": {
+    "start": "node rest.js"
   }
 }

@@ -1,0 +1,24 @@
+{
+	"kawi": {
+		"id": 123,
+		"email": "hello@hello.com",
+		"bot": {
+			"id": "kawibot",
+			"name": "kawi's Bot",
+			"code": "def play_game(board):\n\treturn true",
+			"lang": "py",
+			"score": 1000
+		}
+	},
+	"anotherUser": {
+		"id": 234,
+		"email": "another@another.com",
+		"bot": {
+			"id": "anotherUserbot",
+			"name": "anotherUser's Bot",
+			"code": "def play_game(board):\n\treturn true",
+			"lang": "py",
+			"score": 1000
+		}
+	}
+}
