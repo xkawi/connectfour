@@ -1,10 +1,6 @@
 var restify = require("restify");
 var Firebase = require("firebase");
-//var request = require("request");
-var url = require('url'),
-	querystring = require('querystring'),
-	http = require('http')
-		
+var request = require("request");	
 
 var FIREBASE_ROOT_PATH = "https://cloudcomputing.firebaseio.com/";
 var rootRef = new Firebase(FIREBASE_ROOT_PATH);
@@ -53,8 +49,8 @@ var game_functions = {
 	checkWinner: function(board, side){
 		//algo goes here
 	},
-	placeToBoard: function(board, side){
-
+	placeChip: function(board, side){
+		//algo goes here
 	},
 	getAllBots: function(fn){
 		rootRef.once("value", function(snapshots){
@@ -89,14 +85,14 @@ var game_functions = {
 	},
 	executeJsBot: function(botcode, board, fn){
 		//return integer or the index of the next move
-		//return null if have error
+		//return null for value/result if have error
 		try {
 			eval(botcode);
 			var result = play_game(board);
 			var tryParseToInt = parseInt(result)
 			if (isFinite(tryParseToInt)){ //isFinite() return true if it IS integer or legal number
 				if (tryParseToInt < 0 || tryParseToInt > 6) { return fn("outofbound", null); } //outofbound
-				//CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER
+				//CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER: NEED STRUCTURE OF THE BOARD
 				return fn(null, tryParseToInt);
 			} else {
 				return fn("error", null); //non-integer value
@@ -106,47 +102,41 @@ var game_functions = {
 		}
 	},
 	executePyBot: function(botcode, board, fn){
-
 		var options = {
 			form: { "code": botcode, "board": board }
 		}
 		request.post( PYTHON_VERIFIER_API_ENDPOINT, options, function (err, res, body) {
-			console.log(err, res, body);
 			if (err && res.statusCode != 200) { return fn(err, body); }
 			////CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER
-			if (body == "error" || body == -1){
+			if (body == "error" || body == "-1"){
 				return fn("error", body);
 			}
 			return fn(null, body);
-			console.log(body);			
 		});
 	},
 	verifyCode: function(botcode, board, lang, fn){
 		if (lang === "js"){
 			this.executeJsBot(botcode, board, function(err, result){
-				//if err is not null and result is null value
+				//if got err and result is null value
 				if(err && !result){ return fn(err, result); } 
 				return fn(null, result);
 			});
 		} else if (lang === "py") {
 			this.executePyBot(botcode, board, function(err, result){
 				if (err) { return fn(err, result) }
-					if (!err){
-						return fn(null, result);
-					}
-				});
+				if (!err){ return fn(null, result) }
+			});
 		}
 	},
 	initBoard: function(){
-			//return [][];
-		},
-		saveBot: function(uid, bot_code, bot_id){
+
+	},
+	saveBot: function(uid, bot_code, bot_id){
 		//fb_id/bots/bot_id
 		//bot_id = length of bots array + 1
 	}
 
 }
-
 
 
 /*=========FUNCTIONS FOR ALL THE ROUTES===========*/
@@ -188,35 +178,14 @@ function leaderboard(req, res, next) {
 	res.send(bots);
 }
 
-function verify_jscode(req, res, next){
-	console.log(req.params);
-	var botcode = req.params['botcode'];
-	var board = req.params['board'];
-	if (botcode && board){
-		game_functions.executeJsBot(botcode, board, function(err, result){
-			if(err && !result){ //if err is not null and result is null value
-				res.json({"error": true, "message": err, "result": result});
-			} else {
-				//CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER
-				res.json({"error": false, "message": err, "result": result});
-			}
-		});
-	} else {
-		res.json({"error": true, "message": "missing parameter", "result": null});
-	}
-}
-
 function verify_code(req, res, next){
 	//pass code and board
 	var code = req.params['code'];
 	var board = req.params['board'];
 	var lang = req.params['lang'];
-
 	game_functions.verifyCode(code, board, lang, function(err, result){
-		if (err){
-			res.send("error");
-		}
-		res.send(result);
+		if (err) { res.json({"error": true, "message": err, "result": result}); }
+		res.json({"error": false, "message": err, "result": result});
 	})
 }
 
@@ -323,8 +292,6 @@ server.post('/submit_bot', submit_bot);
 server.post('/play', play);
 
 //for debug purpose
-//server.post('/verify_jscode', verify_jscode);
-//server.post('/verify_pycode', verify_pycode);
 server.post('/verify_code', verify_code);
 server.get('/user_bots', get_user_bots)
 //to ensure that the test pass, if fail means something is wrong with the server
