@@ -1,5 +1,5 @@
 {
-  "name": "cloud4",
+  "name": "cloud-connectfour",
   "description": "Connect4 Game called 'cloud4' - a Cloud Computing Module Project",
   "version": "0.0.1",
   "dependencies": {

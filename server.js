@@ -6,7 +6,7 @@ var rootRef = new Firebase(FIREBASE_ROOT_PATH);
 
 /*======INIT AND CONFIGURING SERVER======*/
 var server = restify.createServer({
-	name: "cloudcomputing-project"
+	name: "cloud-connectfour"
 });
 //BUNDLED PLUGINS: http://mcavage.me/node-restify/#Server-API
 server.use(restify.queryParser());
@@ -213,6 +213,9 @@ server.get('/leaderboard', leaderboard);
 server.post('/login', login);
 server.post('/submit_bot', submit_bot);
 server.post('/play', play);
+
+//to ensure that the test pass, if fail means something is wrong with the server
+//and travis will notify us
 server.get('/test', function(req, res, next){
 	res.send(200, 'success');
 })
