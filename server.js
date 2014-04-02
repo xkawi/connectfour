@@ -1,8 +1,14 @@
 var restify = require("restify");
 var Firebase = require("firebase");
+//var request = require("request");
+var url = require('url'),
+	querystring = require('querystring'),
+	http = require('http')
+		
 
 var FIREBASE_ROOT_PATH = "https://cloudcomputing.firebaseio.com/";
 var rootRef = new Firebase(FIREBASE_ROOT_PATH);
+var PYTHON_VERIFIER_API_ENDPOINT = "http://flask-kawi.rhcloud.com/execute";
 
 /*======INIT AND CONFIGURING SERVER======*/
 var server = restify.createServer({
@@ -58,17 +64,19 @@ var game_functions = {
 				if (!data.hasOwnProperty(key)) {
 					continue;//The current property is not a direct property	
 				}
-				var bot = {
-					"userid": key,
-					"bot": data[key]['bot']
-				}
-			    //console.log(bot);
-			    bots.push(bot)
+				var userbots = data[key]['bots'];
+				for (var i = userbots.length - 1; i >= 0; i--) {
+					var bot = {
+						"userid": key,
+						"bot": userbots[i]
+					}
+					bots.push(bot)
+				};
 			}
 			return fn(bots);
 		});
 	},
-	getUserBots = function(uid, fn){
+	getUserBots: function(uid, fn){
 		var botsRef = new Firebase(FIREBASE_ROOT_PATH + uid + "/bots");
 		botsRef.once("value", function(snapshots){
 			var data = snapshots.val();
@@ -88,6 +96,7 @@ var game_functions = {
 			var tryParseToInt = parseInt(result)
 			if (isFinite(tryParseToInt)){ //isFinite() return true if it IS integer or legal number
 				if (tryParseToInt < 0 || tryParseToInt > 6) { return fn("outofbound", null); } //outofbound
+				//CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER
 				return fn(null, tryParseToInt);
 			} else {
 				return fn("error", null); //non-integer value
@@ -96,10 +105,42 @@ var game_functions = {
 			return fn(err.message, null);
 		}
 	},
+	executePyBot: function(botcode, board, fn){
+
+		var options = {
+			form: { "code": botcode, "board": board }
+		}
+		request.post( PYTHON_VERIFIER_API_ENDPOINT, options, function (err, res, body) {
+			console.log(err, res, body);
+			if (err && res.statusCode != 200) { return fn(err, body); }
+			////CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER
+			if (body == "error" || body == -1){
+				return fn("error", body);
+			}
+			return fn(null, body);
+			console.log(body);			
+		});
+	},
+	verifyCode: function(botcode, board, lang, fn){
+		if (lang === "js"){
+			this.executeJsBot(botcode, board, function(err, result){
+				//if err is not null and result is null value
+				if(err && !result){ return fn(err, result); } 
+				return fn(null, result);
+			});
+		} else if (lang === "py") {
+			this.executePyBot(botcode, board, function(err, result){
+				if (err) { return fn(err, result) }
+					if (!err){
+						return fn(null, result);
+					}
+				});
+		}
+	},
 	initBoard: function(){
 			//return [][];
-	},
-	saveBot: function(uid, bot_code, bot_id){
+		},
+		saveBot: function(uid, bot_code, bot_id){
 		//fb_id/bots/bot_id
 		//bot_id = length of bots array + 1
 	}
@@ -147,7 +188,7 @@ function leaderboard(req, res, next) {
 	res.send(bots);
 }
 
-function check_jscode(req, res, next){
+function verify_jscode(req, res, next){
 	console.log(req.params);
 	var botcode = req.params['botcode'];
 	var board = req.params['board'];
@@ -163,6 +204,20 @@ function check_jscode(req, res, next){
 	} else {
 		res.json({"error": true, "message": "missing parameter", "result": null});
 	}
+}
+
+function verify_code(req, res, next){
+	//pass code and board
+	var code = req.params['code'];
+	var board = req.params['board'];
+	var lang = req.params['lang'];
+
+	game_functions.verifyCode(code, board, lang, function(err, result){
+		if (err){
+			res.send("error");
+		}
+		res.send(result);
+	})
 }
 
 function submit_bot(req, res, next) {
@@ -251,9 +306,13 @@ function play(req, res, next) {
 function get_user_bots(req, res, next){
 	console.log(req.query);
 	var uid = req.query["userid"];
-	game_functions.getUserBots(function(bots){
-		res.send(200, bots);
-	});
+	if (uid){
+		game_functions.getUserBots(uid, function(bots){
+			res.send(200, bots);
+		});
+	} else {
+		res.send(200, {"error": true, "message": "missing userid parameter"});
+	}
 }
 
 // routes
@@ -264,7 +323,9 @@ server.post('/submit_bot', submit_bot);
 server.post('/play', play);
 
 //for debug purpose
-server.post('/check_jscode', check_jscode);
+//server.post('/verify_jscode', verify_jscode);
+//server.post('/verify_pycode', verify_pycode);
+server.post('/verify_code', verify_code);
 server.get('/user_bots', get_user_bots)
 //to ensure that the test pass, if fail means something is wrong with the server
 //and travis will notify us

@@ -64,4 +64,58 @@ Player:
 
 Check whether the chess score tight to user or bot
 
+
+app.post('/verify', function(req, res) {
+
+	// jsonrequest param
+	var jsonrequest = (req.body['jsonrequest']) ? req.body['jsonrequest'] : undefined;
+
+	// Language param, either 'py' or 'js'
+	var lang = (req.body['lang']) ? (req.body['lang'] === 'py') ? 'python' : 'js' : 'python';
+
+	if (lang && jsonrequest) {
+        var json_data = querystring.stringify({
+          jsonrequest : JSON.stringify(jsonrequest)
+        });
+        var options = {
+          host : 'ec2-54-251-204-6.ap-southeast-1.compute.amazonaws.com',
+          path : '/' + lang,
+          method : 'POST',
+          headers : {
+            'Content-Type' : 'application/x-www-form-urlencoded',
+            'Content-Length' : json_data.length
+          }
+        };
+        var verified_results = '';
+
+        // Call the HTTP request
+      var request = http.request(options, function(response) {
+        // Handle data received
+        response.on('data', function(chunk) {
+          verified_results += chunk.toString();
+        });
+        // Send the json response
+        response.on("end", function() {
+          res.jsonp(JSON.parse(verified_results));
+        });
+      }).on('error', function(e) {
+        console.log("Got error: " + e.message);
+      });
+
+      // Write jsonrequest data to the HTTP request
+      request.write(querystring.stringify({
+        jsonrequest : JSON.stringify(jsonrequest)
+      }));
+      request.end();
+	} else {
+        res.jsonp({
+            error: 'Please check parameters!'
+        });
+	}
+});
+
+
+
+
+
 */

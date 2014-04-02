@@ -17,10 +17,17 @@
 		</div>
 	</form>
 
-	<form action="/check_jscode" method="post">
+	<form action="/verify_code" method="post">
+		<div>
+			<label>Language:</label>
+			<select name="lang">
+				<option value="py">Python</option>
+				<option value="js">Javascript</option>
+  			</select>
+		</div>
 		<div>
 			<label>Code:</label>
-			<textarea name="botcode"></textarea>
+			<textarea name="code"></textarea>
 		</div>
 		<div>
 			<label>Board:</label>
@@ -30,6 +37,7 @@
 			<input type="submit" value="Check Code"/>
 		</div>
 	</form>
+
 
 
 	Public HTML here!!
