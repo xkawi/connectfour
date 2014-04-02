@@ -78,7 +78,7 @@ var game_functions = {
 		//> "X______________"
 	},
 	initBoard: function(){
-		return [][];
+		//return [][];
 	}
 
 }
@@ -112,7 +112,7 @@ function login(req, res, next) {
         	res.json(user);
         });
 	} else {
-		res.json({"error": "missing username or email");
+		res.json({"error": "missing username or email"});
 	}
 }
 
@@ -213,6 +213,10 @@ server.get('/leaderboard', leaderboard);
 server.post('/login', login);
 server.post('/submit_bot', submit_bot);
 server.post('/play', play);
+server.get('/test', function(req, res, next){
+	res.send(200, 'success');
+})
+
 //SERVE STATIC/PUBLIC FILE
 server.get('/', restify.serveStatic({
 	directory: './public',
@@ -231,3 +235,4 @@ var port = process.env.PORT || 5000;
 server.listen(port, function() {
 	console.log("Listening on " + port);
 });
+module.exports = server

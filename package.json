@@ -3,16 +3,17 @@
   "description": "Connect4 Game called 'cloud4' - a Cloud Computing Module Project",
   "version": "0.0.1",
   "dependencies": {
-    "restify": "2.4.x",
-    "firebase": "*",
-    "mocha": "0.4.12"
+    "restify": "2.4.1",
+    "firebase": "1.0.11",
+    "mocha": "1.18.2",
+    "supertest": "0.10.*"
   },
   "engines": {
-    "node": "0.10.x",
+    "node": "0.10.26",
     "npm": "1.2.x"
   },
   "scripts": {
-    "start": "node rest.js",
-    "test": "./node_modules/mocha/bin/mocha"
+    "start": "node server.js",
+    "test": "mocha test/*"
   }
 }
