@@ -29,15 +29,10 @@ function findByEmail(uid, email, fn) {
 }
 
 function createUser(uid, email, fn){
+	//first bot
 	var user = {
 		"email": email,
-		"bot": {
-			"id": username + "bot",
-			"name": username + "'s Bot",
-			"code": "def play_game(board):\n\treturn true",
-			"lang": "py",
-			"score": 1000
-		}
+		"bots": []
 	}
 	var userRef = new Firebase(FIREBASE_ROOT_PATH + "/" + uid);
 	userRef.update(user); //update to firebase
