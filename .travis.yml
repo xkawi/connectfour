@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+- 0.10.26
+after_success:
+  - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+  - git remote add heroku git@heroku.com:cloud-connectfour.git
+  - echo "Host heroku.com" >> ~/.ssh/config
+  - echo "   StrictHostKeyChecking no" >> ~/.ssh/config
+  - echo "   CheckHostIP no" >> ~/.ssh/config
+  - echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+  - yes | heroku keys:add
+  - yes | git push heroku master
+deploy:
+  app: cloud-connectfour
+  provider: heroku
+  api_key:
+    secure: VNFhX7kPpwDkmb6uPfMCLiXJVI9Hd9mJBsf9aVoOIR3nFv5VGsTq3+GaBmnbeON+WnVei5inFPLImNjhLZ9hep3ipZDQpJ/cTbNj/6SLbK6rZlu2e8EI1Bd6Mv5qJv6PH0fG1enozgb6mVsRFMFdtRdOaX4OE/Zmn/OZAMnoSqI=

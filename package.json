@@ -4,13 +4,15 @@
   "version": "0.0.1",
   "dependencies": {
     "restify": "2.4.x",
-    "firebase": "*"
+    "firebase": "*",
+    "mocha": "0.4.12"
   },
   "engines": {
     "node": "0.10.x",
     "npm": "1.2.x"
   },
   "scripts": {
-    "start": "node rest.js"
+    "start": "node rest.js",
+    "test": "./node_modules/mocha/bin/mocha"
   }
 }
