@@ -2,23 +2,34 @@
 	"kawi": {
 		"id": 123,
 		"email": "hello@hello.com",
-		"bot": {
-			"id": "kawibot",
-			"name": "kawi's Bot",
-			"code": "def play_game(board):\n\treturn true",
+		"bots": [
+		{
+			"id": 1,
+			"name": "Bot1",
+			"code": "function play_game(board){\n\treturn Math.floor(Math.random()*6);\n}",
+			"lang": "js",
+			"score": 800
+		},
+		{
+			"id": 2,
+			"name": "Bot2",
+			"code": "def play_game(board):\n\treturn randint(0,6) #inclusive",
 			"lang": "py",
-			"score": 1000
+			"score": 800
 		}
+		]
 	},
-	"anotherUser": {
+	"bob": {
 		"id": 234,
-		"email": "another@another.com",
-		"bot": {
+		"email": "bob@email.com",
+		"bots": [
+		{
 			"id": "anotherUserbot",
 			"name": "anotherUser's Bot",
-			"code": "def play_game(board):\n\treturn true",
+			"code": "def play_game(board):\n\treturn randint(0,6) #inclusive",
 			"lang": "py",
-			"score": 1000
+			"score": 800
 		}
+		]
 	}
 }

@@ -16,6 +16,22 @@
 			<input type="submit" value="Log In"/>
 		</div>
 	</form>
+
+	<form action="/check_jscode" method="post">
+		<div>
+			<label>Code:</label>
+			<textarea name="botcode"></textarea>
+		</div>
+		<div>
+			<label>Board:</label>
+			<input type="text" name="board"/>
+		</div>
+		<div>
+			<input type="submit" value="Check Code"/>
+		</div>
+	</form>
+
+
 	Public HTML here!!
 	Any file hosted in "public" folder will be accessible directory from ROOT URL
 	e.g. you put a file in 'public/css/style.css', it can be access from 'http://localhost:5000/css/style.css' 

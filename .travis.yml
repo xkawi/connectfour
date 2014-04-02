@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- 0.10.26
+- 0.10.25
 after_success:
   - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
   - git remote add heroku git@heroku.com:cloud-connectfour.git

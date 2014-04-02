@@ -1,6 +1,6 @@
 {
   "name": "cloud-connectfour",
-  "description": "Connect4 Game called 'cloud4' - a Cloud Computing Module Project",
+  "description": "Connect4 Game called 'cloud-connectfour' - a Cloud Computing Module Project",
   "version": "0.0.1",
   "dependencies": {
     "restify": "2.4.1",

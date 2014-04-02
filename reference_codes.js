@@ -6,6 +6,16 @@ var side = "X"
 play_game(board, side)
 > "X______________"
 
+default function for javascript:
+function play_game(board):
+	return Math.floor(Math.random()*6);
+}
+
+def play_game(board):
+	return randint(0,6) #inclusive
+	
+
+colIsFull
 PYTHON: EXECUTE PYTHON STRING CODE
 exec "code string"
 

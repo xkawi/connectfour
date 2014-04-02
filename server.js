@@ -14,8 +14,8 @@ server.use(restify.bodyParser());
 server.use(restify.CORS());
 
 /*======LOGIN RELATED FUNCTIONS=====*/
-function findByEmail(username, email, fn) {
-	rootRef.child(username).once('value', function(snapshot) {
+function findByEmail(uid, email, fn) {
+	rootRef.child(uid).once('value', function(snapshot) {
 		var user = snapshot.val();
 		var exists = (user !== null);
 		if (exists && user.email === email) {
@@ -26,7 +26,7 @@ function findByEmail(username, email, fn) {
 	});
 }
 
-function createUser(username, email, fn){
+function createUser(uid, email, fn){
 	var user = {
 		"email": email,
 		"bot": {
@@ -37,7 +37,7 @@ function createUser(username, email, fn){
 			"score": 1000
 		}
 	}
-	var userRef = new Firebase(FIREBASE_ROOT_PATH + "/" + username);
+	var userRef = new Firebase(FIREBASE_ROOT_PATH + "/" + uid);
 	userRef.update(user); //update to firebase
 	return fn(null, user);
 }
@@ -59,7 +59,7 @@ var game_functions = {
 					continue;//The current property is not a direct property	
 				}
 				var bot = {
-					"username": key,
+					"userid": key,
 					"bot": data[key]['bot']
 				}
 			    //console.log(bot);
@@ -68,17 +68,40 @@ var game_functions = {
 			return fn(bots);
 		});
 	},
-	executeJsBot: function(botcode, lang, board){
+	getUserBots = function(uid, fn){
+		var botsRef = new Firebase(FIREBASE_ROOT_PATH + uid + "/bots");
+		botsRef.once("value", function(snapshots){
+			var data = snapshots.val();
+			if (data !== null){ //if there are bots
+				return fn(data);
+			} else {
+				return fn(new Array());
+			}
+		})
+	},
+	executeJsBot: function(botcode, board, fn){
 		//return integer or the index of the next move
 		//return null if have error
-		eval("function play_game(board,side) {\n  return board.replace('_',side);\n}")
-		var board = "_______________"
-		var side = "X"
-		play_game(board, side)
-		//> "X______________"
+		try {
+			eval(botcode);
+			var result = play_game(board);
+			var tryParseToInt = parseInt(result)
+			if (isFinite(tryParseToInt)){ //isFinite() return true if it IS integer or legal number
+				if (tryParseToInt < 0 || tryParseToInt > 6) { return fn("outofbound", null); } //outofbound
+				return fn(null, tryParseToInt);
+			} else {
+				return fn("error", null); //non-integer value
+			}
+		} catch(err) {
+			return fn(err.message, null);
+		}
 	},
 	initBoard: function(){
-		//return [][];
+			//return [][];
+	},
+	saveBot: function(uid, bot_code, bot_id){
+		//fb_id/bots/bot_id
+		//bot_id = length of bots array + 1
 	}
 
 }
@@ -94,16 +117,16 @@ function index(req, res, next) {
 
 function login(req, res, next) {
 	email = req.params['email'];
-	username = req.params['username'];
+	fbid = req.params['fbid']; //change to fbid
 	//console.log(email, username, req.params)
-	if (email && username){
+	if (email && fbid){
 		// check if user exists
-		findByEmail(username, email, function(err, user){
+		findByEmail(fbid, email, function(err, user){
 			if (err) { res.send(err); }
 			// if user does not exist
 			if (!user) {
         		// create user and save to firebase
-        		createUser(username, email, function(err, user){
+        		createUser(fbid, email, function(err, user){
         			if (err) { res.send(err); }
         			res.json(user);
         		});
@@ -122,6 +145,24 @@ function leaderboard(req, res, next) {
 
 	// return bots
 	res.send(bots);
+}
+
+function check_jscode(req, res, next){
+	console.log(req.params);
+	var botcode = req.params['botcode'];
+	var board = req.params['board'];
+	if (botcode && board){
+		game_functions.executeJsBot(botcode, board, function(err, result){
+			if(err && !result){ //if err is not null and result is null value
+				res.json({"error": true, "message": err, "result": result});
+			} else {
+				//CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER
+				res.json({"error": false, "message": err, "result": result});
+			}
+		});
+	} else {
+		res.json({"error": true, "message": "missing parameter", "result": null});
+	}
 }
 
 function submit_bot(req, res, next) {
@@ -207,6 +248,14 @@ function play(req, res, next) {
 	res.send(result);
 }
 
+function get_user_bots(req, res, next){
+	console.log(req.query);
+	var uid = req.query["userid"];
+	game_functions.getUserBots(function(bots){
+		res.send(200, bots);
+	});
+}
+
 // routes
 server.get('/index', index);
 server.get('/leaderboard', leaderboard);
@@ -214,6 +263,9 @@ server.post('/login', login);
 server.post('/submit_bot', submit_bot);
 server.post('/play', play);
 
+//for debug purpose
+server.post('/check_jscode', check_jscode);
+server.get('/user_bots', get_user_bots)
 //to ensure that the test pass, if fail means something is wrong with the server
 //and travis will notify us
 server.get('/test', function(req, res, next){
