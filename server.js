@@ -43,8 +43,130 @@ function createUser(uid, email, fn){
 
 /*========GAME RELATED FUNCTIONS==========*/
 var game_functions = {
-	checkWinner: function(board, side){
-		//algo goes here
+	checkWinner: function(board, row, column){
+		var side = board[row][column];
+		var max_row = board.length;
+		var max_col = board[0].length;
+
+		var total_chip = 1;
+
+		// check vertical - top to bottom
+		// move up
+		for (var i = row-1; i >= 0; row--) {
+			if (board[i][column] == side) {
+				total_chip += 1;
+			} else {
+				break;
+			}
+		}
+
+		// move down
+		for (var i = row+1; i < max_row; row++) {
+			if (board[i][column] == side) {
+				total_chip += 1;
+			} else {
+				break;
+			}
+		}
+ 		// check winning
+		if (total_chip >= 4) {
+			return true;
+		}
+
+		total_chip = 1; // reset
+		// check horizontal - left to right
+		// move left
+		for (var i = column-1; i >= 0; column--) {
+			if (board[row][i] == side) {
+				total_chip += 1;
+			} else {
+				break;
+			}
+		}
+
+		// move right
+		for (var i = column+1; i < max_col; column++) {
+			if (board[row][i] == side) {
+				total_chip += 1;
+			} else {
+				break;
+			}
+		}
+		// check winning
+		if (total_chip >= 4) {
+			return true;
+		}
+
+		total_chip = 1; // reset
+		// check back slash - left top to right bottom
+		// move left top
+		r = row - 1;
+		c = column - 1;
+		while (r >= 0 && c >= 0) {
+			if (board[r][c] == side) {
+				total_chip += 1;
+			} else {
+				break;
+			}
+
+			r -= 1;
+			c -= 1;
+		}
+
+		// move right bottom
+		r = row + 1;
+		c = column + 1;
+		while (r < max_row && c < max_col) {
+			if (board[r][c] == side) {
+				total_chip += 1;
+			} else {
+				break;
+			}
+
+			r += 1;
+			c += 1;
+		}
+		// check winning
+		if (total_chip >= 4) {
+			return true;
+		}
+
+		total_chip = 1; // reset
+		// check forward slash - right top to left bottom
+		// move right top
+		r = row - 1;
+		c = column + 1;
+		while (r >= 0 && c < max_col) {
+			if (board[r][c] == side) {
+				total_chip += 1;
+			} else {
+				break;
+			}
+
+			r -= 1;
+			c += 1;
+		}
+
+		// move left bottom
+		r = row + 1;
+		c = column - 1;
+		while (r < max_row && c >= 0) {
+			if (board[r][c] == side) {
+				total_chip += 1;
+			} else {
+				break;
+			}
+
+			r += 1;
+			c -= 1;
+		}
+		// check winning
+		if (total_chip >= 4) {
+			return true;
+		}
+
+		// no winner
+		return false;
 	},
 	placeChip: function(board, side, column){
 		for (var i = board.length-1; i >= 0; i--) {
