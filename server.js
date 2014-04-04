@@ -44,8 +44,13 @@ var game_functions = {
 	checkWinner: function(board, side){
 		//algo goes here
 	},
-	placeChip: function(board, side){
-		//algo goes here
+	placeChip: function(board, side, column){
+		for (var i = board.length-1; i >= 0; i--) {
+			if (board[i][column] == '') {
+				board[i][column] = side;
+				break;
+			} 
+		}
 	},
 	getAllBots: function(fn){
 		rootRef.once("value", function(snapshots){
