@@ -50,9 +50,11 @@ var game_functions = {
 		for (var i = board.length-1; i >= 0; i--) {
 			if (board[i][column] == '') {
 				board[i][column] = side;
-				break;
+				return {"row": i, "column": column};
 			} 
 		}
+
+		return null;
 	},
 	getAllBots: function(fn){
 		rootRef.once("value", function(snapshots){
