@@ -49,10 +49,9 @@ var game_functions = {
 		var max_col = board[0].length;
 
 		var total_chip = 1;
-
 		// check vertical - top to bottom
 		// move up
-		for (var i = row-1; i >= 0; row--) {
+		for (var i = row-1; i >= 0; i--) {
 			if (board[i][column] == side) {
 				total_chip += 1;
 			} else {
@@ -61,7 +60,7 @@ var game_functions = {
 		}
 
 		// move down
-		for (var i = row+1; i < max_row; row++) {
+		for (var i = row+1; i < max_row; i++) {
 			if (board[i][column] == side) {
 				total_chip += 1;
 			} else {
@@ -76,7 +75,7 @@ var game_functions = {
 		total_chip = 1; // reset
 		// check horizontal - left to right
 		// move left
-		for (var i = column-1; i >= 0; column--) {
+		for (var i = column-1; i >= 0; i--) {
 			if (board[row][i] == side) {
 				total_chip += 1;
 			} else {
@@ -85,7 +84,7 @@ var game_functions = {
 		}
 
 		// move right
-		for (var i = column+1; i < max_col; column++) {
+		for (var i = column+1; i < max_col; i++) {
 			if (board[row][i] == side) {
 				total_chip += 1;
 			} else {
