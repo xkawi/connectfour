@@ -1,6 +1,8 @@
 var restify = require("restify");
 var Firebase = require("firebase");
 var request = require("request");	
+var querystring = require('querystring');
+var http = require('http');
 
 var FIREBASE_ROOT_PATH = "https://cloudcomputing.firebaseio.com/";
 var rootRef = new Firebase(FIREBASE_ROOT_PATH);
@@ -205,27 +207,77 @@ function verify_code(req, res, next){
 function submit_bot(req, res, next) {
 	bot = req.params['bot']; // move function in text
 	lang = req.params['lang']; // programming language
+	user_id = req.params['fb_id']; // get user fb_id
+	
+	success = false;
+	code = '';
+	tests = '';
+	verified_results = '';
 
-	// get user id from session
+	// validate python
+	if (lang == 'python') {
+		code = 'def move(baord):\n  '+bot;
+		tests = ">>> move('WHATEVER')\n  'ANYTHING'\n";
+	} else { // validate javascript
+		code = 'function move(baord) {\n '+bot+' \n}';
+		tests = "assert_equal('ANYTHING', move([[]]))";
+	}
 
-	// validate syntax & validate valid move
+	jsonrequest = {
+		"solution": code,
+   		"tests": tests
+	}
 
-		// if lang == 'python'
-			// call API to python app
-			// check whether it returns int
-		// else
-			// run the unit testing here
+	// prepare data for verifier
+	var json_data = querystring.stringify({
+    	jsonrequest : JSON.stringify(jsonrequest)
+    });
 
-	// if passes validations
-		// save to db if there's no existing bot
-		// update db if there is existing bot
+	// configure verifer settings
+	var options = {
+    	host : '162.222.183.53',
+    	path : '/' + lang,
+      	method : 'POST',
+      	headers : {
+        	'Content-Type' : 'application/x-www-form-urlencoded',
+        	'Content-Length' : json_data.length
+      	}
+    };
 
-		// send true
+    // create HTTP request
+    var request = http.request(options, function(response) {
+    	// Handle data received
+        response.on('data', function(chunk) {
+        	verified_results += chunk.toString();
+        });
 
-	// else
-		// send false
+        // process returned data
+        response.on("end", function() {
+        	result = JSON.parse(verified_results);
+        	move = result['results'][0]['received'];
 
-	res.send(true); // to be removed
+        	// check move result validity
+        	if (parseInt(move) >= 0 && parseInt(move) <= 6) {
+        		success = true;
+
+        		// valid move, therefore
+        		// save to db if bot exists
+
+        		// otherwise update and save a revision
+
+        	}
+
+        	res.send(200, {"success": success});
+        });
+    }).on('error', function(e) {
+        console.log("Got error: " + e.message);
+    });
+
+    // send HTTP request
+    request.write(querystring.stringify({
+    	jsonrequest : JSON.stringify(jsonrequest)
+    }));
+    request.end();
 }
 
 function play(req, res, next) {
