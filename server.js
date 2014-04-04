@@ -407,11 +407,15 @@ function play(req, res, next) {
 	bot1 = req.params['bot1'];
 	bot2 = req.params['bot2'];
 
-	//board = [][]; //7x6
-
 	// get the two bots from db
+	bot1_code = 'return Math.floor((Math.random()*7))'; // for testing
+	bot2_code = 'return Math.floor((Math.random()*7))'; // for testing
+
+	eval('function move1(baord) {\n '+bot1_code+' \n}'); // bot1 move()
+	eval('function move2(baord) {\n '+bot2_code+' \n}'); // bot2 move()
 
 	// create empty board, a 2D array
+	board = game_functions.initBoard(); //7x6
 
 	// init counter
 	count = 1;
@@ -419,39 +423,56 @@ function play(req, res, next) {
 	bot1_chip = 'R'; // bot1 will have Red chip - R
 	bot2_chip = 'W'; // bot2 will have White chip - W
 	// winning tracker
-	has_winner = false;
+	end_game = false;
 	result = {};
 	steps = [];
 	move = -1;
 
-	while (!has_winner) {
-		// odd, bot1's turn
-		if (count%2 == 1) {
-			// run bot1's bot with current board
-			// get the move index	
+	// first move
+	steps.push(board);
 
-		} else { // even, bot2's turn
-			// run bot2's bot with current board 			
-			// get the move index
+	while (!end_game) {
+		try {
+			side = '';
+			// odd, bot1's turn
+			if (count%2 == 1) {
+				// get the move index	
+				move = move1(board);
+				side = bot1_chip;
+			} else { // even, bot2's turn			
+				// get the move index
+				move = move2(board);
+				side = bot2_chip;
+			}
 
-		}
+			// place the chip with the move index
+			chip = game_functions.placeChip(board, side, move);
+			// update board
+			board[chip['row']][chip['column']] = side;
 
-		// place the chip with the move index
+			// add the board to steps array
+			steps.push(board);
 
-		// update board
+			// check winning
+			end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
 
-		// add the board to steps array
-
-		// check winning
-		// if bot1 wins
-			// result['winnder'] = 'bot1';
-		// else if bot2 wins
-			// result['winnder'] = 'bot2';
-		// else
-			// it is a draw
-			// result['winnder'] = null;
+			if (end_game) {
+				if (count%2 == 1) {
+					result['winner'] = 'bot1';
+				} else { //			
+					result['winner'] = 'bot2';
+				}
+			}
+			
 			count += 1;
+		} catch(err) {
+			console.log(err);
+			// bad move detected
+			result['winner'] = '';
+			result['bad_move'] = count%2 == 1 ? 'bot1' : 'bot2';
+			end_game = true;
 		}
+	}
 
 	// add steps to result
 	result['steps'] = steps;
