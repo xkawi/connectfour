@@ -124,7 +124,20 @@ var game_functions = {
 		}
 	},
 	initBoard: function(){
+		var board = [];
+		columns = 7;
+		rows = 6;
 
+		// init empty board
+		for (var i = 0; i < rows; i++) {
+			board.push([]);
+
+			for (var j = 0; j < columns; j++) { 
+				board[i].push('');
+			}
+		}
+
+		return board;
 	},
 	saveBot: function(uid, bot_code, bot_id){
 		//fb_id/bots/bot_id
