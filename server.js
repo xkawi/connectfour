@@ -239,18 +239,43 @@ var game_functions = {
 			return fn(null, body);
 		});
 	},
-	verifyCode: function(botcode, board, lang, fn){
-		if (lang === "js"){
-			this.executeJsBot(botcode, board, function(err, result){
-				//if got err and result is null value
-				if(err && !result){ return fn(err, result); } 
-				return fn(null, result);
+	executeCode: function(bot, board){
+		if (bot.lang === "python") {
+			var options = { form: { "code": bot.code, "board": board } };
+			console.log(PYTHON_VERIFIER_API_ENDPOINT);
+			request.post(PYTHON_VERIFIER_API_ENDPOINT, options, function(req, res, body){
+				console.log(err, res, body);
+				if (err && res.statusCode != 200) { throw "error"; }
+				if (body == "error" || body == "-1"){
+					throw "error";
+				}
+				return body; //body is the index of the move
 			});
-		} else if (lang === "py") {
-			this.executePyBot(botcode, board, function(err, result){
-				if (err) { return fn(err, result) }
-				if (!err){ return fn(null, result) }
-			});
+			/*this.executePyBot(botcode, board, function(err, index){
+				if (err) { return err }
+				if (!err){ return result }
+			});*/
+		} else if (bot.lang === 'js') {
+			try {
+				eval('function move(board) {\n '+bot.code+' \n}');
+				var result = move(board);
+				var index = parseInt(result);
+				console.log("js: result, index: ",result, index)
+				//isFinite() return true if it IS integer or legal number
+				if (isFinite(index)){
+					if (index < 0 || index > 6) { throw "outofbound"; } //outofbound
+					//CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER: NEED STRUCTURE OF THE BOARD
+					return index;
+				} else {
+					throw "error"; //non-integer value
+				}
+			} catch (err) {
+				throw err;
+			}
+			/*this.executeJsBot(botcode, board, function(err, index){
+				if(err && !result){ return fn(err, index); } 
+				return index;
+			});*/
 		}
 	},
 	initBoard: function(){
@@ -269,9 +294,36 @@ var game_functions = {
 
 		return board;
 	},
-	saveBot: function(uid, bot_code, bot_id){
-		//fb_id/bots/bot_id
-		//bot_id = length of bots array + 1
+	saveBot: function(uid, bot){
+		var ref = new Firebase("https://cloudcomputing.firebaseio.com/" + uid + "/bots");
+		ref.transaction(function(currentData){
+			console.log(currentData);
+			if (currentData !== null){
+				bot.id = currentData.length
+				bot.name = "Bot" + (currentData.length).toString();
+				currentData.push(b);
+				return currentData;
+			} else {//no bot yet
+				return [b];
+			}
+		}, function(err, committed, snapshot){
+			var reply = {
+				'status': 'success',
+				'message': '',
+				'data': snapshot
+			}
+			if (err) {
+				reply.status = 'error';
+				reply.message = 'Unable to save to Database (' + error + ")";
+			} else if (!committed) {
+				reply.status = 'error';
+				reply.message = 'Data Saving Aborted!';
+			} else {
+				reply.status = 'success';
+				reply.message = 'success';
+			}
+			return reply;
+		});
 	}
 
 }
@@ -316,22 +368,32 @@ function leaderboard(req, res, next) {
 	res.send(bots);
 }
 
-function verify_code(req, res, next){
+function execute_code(req, res, next){
 	//pass code and board
-	var code = req.params['code'];
-	var board = req.params['board'];
-	var lang = req.params['lang'];
-	game_functions.verifyCode(code, board, lang, function(err, result){
-		if (err) { res.json({"error": true, "message": err, "result": result}); }
-		res.json({"error": false, "message": err, "result": result});
-	})
+	// 'return Math.floor((Math.random()*7))'
+	var bot = {
+		'user_id': 'kawi',
+		'code': 'return 1/0',
+		'id': 1,
+		'lang': 'python'
+	}
+	var board = game_functions.initBoard();
+	var move = 'init';
+	try {
+		move = game_functions.executeCode(bot, board);
+	} catch (e) {
+		console.log(e);
+	}
+	res.send(200, move);
 }
 
 function submit_bot(req, res, next) {
 	bot = req.params['bot']; // move function in text
 	lang = req.params['lang']; // programming language
 	user_id = req.params['fb_id']; // get user fb_id
-	
+	//user_id = 'kawi';
+	//lang = 'js';
+	//bot = 'return Math.floor((Math.random()*7))';
 	success = false;
 	code = '';
 	tests = '';
@@ -339,10 +401,10 @@ function submit_bot(req, res, next) {
 
 	// validate python
 	if (lang == 'python') {
-		code = 'def move(baord):\n  '+bot;
+		code = 'def move(board):\n  '+bot;
 		tests = ">>> move('WHATEVER')\n  'ANYTHING'\n";
 	} else { // validate javascript
-		code = 'function move(baord) {\n '+bot+' \n}';
+		code = 'function move(board) {\n '+bot+' \n}';
 		tests = "assert_equal('ANYTHING', move([[]]))";
 	}
 
@@ -384,18 +446,25 @@ function submit_bot(req, res, next) {
         	}
 
         	move = result['results'][0]['received'];
-
+        	console.log("move here: ", move);
         	// check move result validity
         	if (parseInt(move) >= 0 && parseInt(move) <= 6) {
         		success = true;
 
         		// valid move, therefore
         		// save to db if bot exists
-
         		// otherwise update and save a revision
-
+        		var b = {
+        			'code': code,
+					'id': 0,
+					'lang': lang,
+					'name': "Bot0",
+					'score': 800,
+					'win': 0,
+					'lose': 0
+				}
+				game_functions.saveBot(user_id, b);
         	}
-
         	res.send(200, {"success": success});
         });
     }).on('error', function(e) {
@@ -410,15 +479,27 @@ function submit_bot(req, res, next) {
 }
 
 function play(req, res, next) {
-	bot1 = req.params['bot1'];
-	bot2 = req.params['bot2'];
+	//bot1 = req.params['bot1']; //expected sample: { id: 0, lang: python, code: asdasd}
+	//bot2 = req.params['bot2'];
+	bot1 = {
+		'user_id': 'kawi',
+		'code': 'return Math.floor((Math.random()*7))',
+		'id': 1,
+		'lang': 'js'
+	}
+	bot2 = {
+		'user_id': 'bob',
+		'code': 'return Math.floor((Math.random()*7))',
+		'id': 0,
+		'lang': 'js'
+	}
+	// get the two bots from user
+	//bot1_code = bot1.code; // for testing
+	//bot2_code = bot2.code; // for testing
 
-	// get the two bots from db
-	bot1_code = 'return Math.floor((Math.random()*7))'; // for testing
-	bot2_code = 'return Math.floor((Math.random()*7))'; // for testing
-
-	eval('function move1(baord) {\n '+bot1_code+' \n}'); // bot1 move()
-	eval('function move2(baord) {\n '+bot2_code+' \n}'); // bot2 move()
+	//TODO: handle python bot
+	//eval('function move1(board) {\n '+bot1_code+' \n}'); // bot1 move()
+	//eval('function move2(board) {\n '+bot2_code+' \n}'); // bot2 move()
 
 	// create empty board, a 2D array
 	board = game_functions.initBoard(); //7x6
@@ -441,7 +522,7 @@ function play(req, res, next) {
 		try {
 			side = '';
 			// odd, bot1's turn
-			if (count%2 == 1) {
+			/*if (count%2 == 1) {
 				// get the move index	
 				move = move1(board);
 				side = bot1_chip;
@@ -449,7 +530,18 @@ function play(req, res, next) {
 				// get the move index
 				move = move2(board);
 				side = bot2_chip;
+			}*/
+			if (count%2 == 1){
+				bot = bot1;
+				side = bot1_chip;
+			} else {
+				bot = bot2;
+				side = bot2_side;
 			}
+
+			//move = //execute the bot
+			//TODO: HANDLE PYTHON CODE
+			move = game_functions.executeCode(bot, board);
 
 			// place the chip with the move index
 			chip = game_functions.placeChip(board, side, move);
@@ -463,6 +555,7 @@ function play(req, res, next) {
 			end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
 
 			if (end_game) {
+				//TODO: update_score(winner_bot, loser_bot);
 				if (count%2 == 1) {
 					result['winner'] = 'bot1';
 				} else { //			
@@ -507,7 +600,7 @@ server.post('/submit_bot', submit_bot);
 server.post('/play', play);
 
 //for debug purpose
-server.post('/verify_code', verify_code);
+server.get('/execute_code', execute_code);
 server.get('/user_bots', get_user_bots)
 //to ensure that the test pass, if fail means something is wrong with the server
 //and travis will notify us
