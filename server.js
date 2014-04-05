@@ -377,6 +377,12 @@ function submit_bot(req, res, next) {
         // process returned data
         response.on("end", function() {
         	result = JSON.parse(verified_results);
+        	// invalid syntax
+        	if (result['errors'] != null && result['errors'] != '') {
+        		success = false;
+        		res.send(200, {"success": success, "error": "invalid syntax"});
+        	}
+
         	move = result['results'][0]['received'];
 
         	// check move result validity
