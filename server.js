@@ -1,6 +1,6 @@
 var restify = require("restify");
 var Firebase = require("firebase");
-var request = require("request");	
+var requests = require("request");	
 var querystring = require('querystring');
 var http = require('http');
 
@@ -68,9 +68,9 @@ var game_functions = {
 			}
 		}
  		// check winning
-		if (total_chip >= 4) {
-			return true;
-		}
+ 		if (total_chip >= 4) {
+ 			return true;
+ 		}
 
 		total_chip = 1; // reset
 		// check horizontal - left to right
@@ -208,74 +208,43 @@ var game_functions = {
 			}
 		})
 	},
-	executeJsBot: function(botcode, board, fn){
-		//return integer or the index of the next move
-		//return null for value/result if have error
-		try {
-			eval(botcode);
-			var result = play_game(board);
-			var tryParseToInt = parseInt(result)
-			if (isFinite(tryParseToInt)){ //isFinite() return true if it IS integer or legal number
-				if (tryParseToInt < 0 || tryParseToInt > 6) { return fn("outofbound", null); } //outofbound
-				//CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER: NEED STRUCTURE OF THE BOARD
-				return fn(null, tryParseToInt);
-			} else {
-				return fn("error", null); //non-integer value
-			}
-		} catch(err) {
-			return fn(err.message, null);
-		}
-	},
-	executePyBot: function(botcode, board, fn){
-		var options = {
-			form: { "code": botcode, "board": board }
-		}
-		request.post( PYTHON_VERIFIER_API_ENDPOINT, options, function (err, res, body) {
-			if (err && res.statusCode != 200) { return fn(err, body); }
-			////CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER
-			if (body == "error" || body == "-1"){
-				return fn("error", body);
-			}
-			return fn(null, body);
-		});
-	},
-	executeCode: function(bot, board){
+	executeCode: function(bot, board, callback){
+		var error = '';
 		if (bot.lang === "python") {
-			var options = { form: { "code": bot.code, "board": board } };
-			console.log(PYTHON_VERIFIER_API_ENDPOINT);
-			request.post(PYTHON_VERIFIER_API_ENDPOINT, options, function(req, res, body){
-				console.log(err, res, body);
-				if (err && res.statusCode != 200) { throw "error"; }
-				if (body == "error" || body == "-1"){
-					throw "error";
+			var options = {
+				uri: PYTHON_VERIFIER_API_ENDPOINT,
+				form: {
+					"code": bot.code,
+					"board": JSON.stringify(board)
 				}
-				return body; //body is the index of the move
+			}
+			requests.post(options, function(err, res, body){
+				if ( (err && res.statusCode != 200) || (body === 'error') ) {
+					error = new Error("error");
+					return callback(error);
+				}
+				return callback(body); //body is the index of the move
 			});
-			/*this.executePyBot(botcode, board, function(err, index){
-				if (err) { return err }
-				if (!err){ return result }
-			});*/
 		} else if (bot.lang === 'js') {
 			try {
 				eval('function move(board) {\n '+bot.code+' \n}');
 				var result = move(board);
 				var index = parseInt(result);
-				console.log("js: result, index: ",result, index)
 				//isFinite() return true if it IS integer or legal number
 				if (isFinite(index)){
-					if (index < 0 || index > 6) { throw "outofbound"; } //outofbound
-					//CHECK WHETHER THE INT REPLACE AN EXISTING PLAYER: NEED STRUCTURE OF THE BOARD
-					return index;
+					if (index < 0 || index > 6) {
+						error = new Error("outofbound");
+						return callback(error);
+					} //outofbound
+					return callback(index);
 				} else {
-					throw "error"; //non-integer value
+					error = new Error('non-integer');
+					return callback(error); //non-integer value
 				}
 			} catch (err) {
-				throw err;
+				error = new Error(err);
+				return callback(error);
 			}
-			/*this.executeJsBot(botcode, board, function(err, index){
-				if(err && !result){ return fn(err, index); } 
-				return index;
-			});*/
 		}
 	},
 	initBoard: function(){
@@ -324,6 +293,9 @@ var game_functions = {
 			}
 			return reply;
 		});
+	},
+	updateBotScore: function(win_bot, lose_bot){
+		//win_bot.userid + /bots + win_bot.id + /score
 	}
 
 }
@@ -368,24 +340,41 @@ function leaderboard(req, res, next) {
 	res.send(bots);
 }
 
-function execute_code(req, res, next){
+/*function execute_code(req, res, next){
 	//pass code and board
 	// 'return Math.floor((Math.random()*7))'
 	var bot = {
 		'user_id': 'kawi',
-		'code': 'return 1/0',
+		'code': 'return randint(0,6)',
 		'id': 1,
 		'lang': 'python'
 	}
 	var board = game_functions.initBoard();
-	var move = 'init';
-	try {
-		move = game_functions.executeCode(bot, board);
-	} catch (e) {
-		console.log(e);
-	}
-	res.send(200, move);
-}
+	//console.log('board: ', board);
+	//console.log('bot: ', bot);
+	var move = '';
+	game_functions.executeCode(bot, board, function(result){
+		try {
+			if (result instanceof Error){
+				move = 'bad move';
+				throw new Error('bad move');
+			} else {
+				move = result;
+				console.log('move inside callback and if in execute_code: ', move);
+			}
+			console.log("result instanceof error: ", result instanceof Error);
+			console.log('typeof result:', typeof result);
+			//move = result;
+			res.send(200, move);
+		} catch (err) {
+			res.send(200, 'badmove');
+			console.log('bad move detected');
+		}
+	});
+	
+	//console.log('move outside callback: ', move);
+	//res.send(200, move);
+}*/
 
 function submit_bot(req, res, next) {
 	bot = req.params['bot']; // move function in text
@@ -410,31 +399,31 @@ function submit_bot(req, res, next) {
 
 	jsonrequest = {
 		"solution": code,
-   		"tests": tests
+		"tests": tests
 	}
 
 	// prepare data for verifier
 	var json_data = querystring.stringify({
-    	jsonrequest : JSON.stringify(jsonrequest)
-    });
+		jsonrequest : JSON.stringify(jsonrequest)
+	});
 
 	// configure verifer settings
 	var options = {
-    	host : '162.222.183.53',
-    	path : '/' + lang,
-      	method : 'POST',
-      	headers : {
-        	'Content-Type' : 'application/x-www-form-urlencoded',
-        	'Content-Length' : json_data.length
-      	}
-    };
+		host : '162.222.183.53',
+		path : '/' + lang,
+		method : 'POST',
+		headers : {
+			'Content-Type' : 'application/x-www-form-urlencoded',
+			'Content-Length' : json_data.length
+		}
+	};
 
     // create HTTP request
     var request = http.request(options, function(response) {
     	// Handle data received
-        response.on('data', function(chunk) {
-        	verified_results += chunk.toString();
-        });
+    	response.on('data', function(chunk) {
+    		verified_results += chunk.toString();
+    	});
 
         // process returned data
         response.on("end", function() {
@@ -456,19 +445,19 @@ function submit_bot(req, res, next) {
         		// otherwise update and save a revision
         		var b = {
         			'code': code,
-					'id': 0,
-					'lang': lang,
-					'name': "Bot0",
-					'score': 800,
-					'win': 0,
-					'lose': 0
-				}
-				game_functions.saveBot(user_id, b);
+        			'id': 0,
+        			'lang': lang,
+        			'name': "Bot0",
+        			'score': 800,
+        			'win': 0,
+        			'lose': 0
+        		}
+        		game_functions.saveBot(user_id, b);
         	}
         	res.send(200, {"success": success});
         });
     }).on('error', function(e) {
-        console.log("Got error: " + e.message);
+    	console.log("Got error: " + e.message);
     });
 
     // send HTTP request
@@ -481,29 +470,22 @@ function submit_bot(req, res, next) {
 function play(req, res, next) {
 	//bot1 = req.params['bot1']; //expected sample: { id: 0, lang: python, code: asdasd}
 	//bot2 = req.params['bot2'];
+	//expected data;
 	bot1 = {
-		'user_id': 'kawi',
-		'code': 'return Math.floor((Math.random()*7))',
+		'userid': 'kawi',
+		'code': 'return randint(0,6)',
 		'id': 1,
-		'lang': 'js'
+		'lang': 'python'
 	}
 	bot2 = {
-		'user_id': 'bob',
-		'code': 'return Math.floor((Math.random()*7))',
+		'userid': 'bob',
+		'code': 'return randint(0,6)',
 		'id': 0,
-		'lang': 'js'
+		'lang': 'python'
 	}
-	// get the two bots from user
-	//bot1_code = bot1.code; // for testing
-	//bot2_code = bot2.code; // for testing
-
-	//TODO: handle python bot
-	//eval('function move1(board) {\n '+bot1_code+' \n}'); // bot1 move()
-	//eval('function move2(board) {\n '+bot2_code+' \n}'); // bot2 move()
-
+	
 	// create empty board, a 2D array
 	board = game_functions.initBoard(); //7x6
-
 	// init counter
 	count = 1;
 	// assign chips
@@ -517,67 +499,64 @@ function play(req, res, next) {
 
 	// first move
 	steps.push(board);
-
-	while (!end_game) {
-		try {
-			side = '';
-			// odd, bot1's turn
-			/*if (count%2 == 1) {
-				// get the move index	
-				move = move1(board);
-				side = bot1_chip;
-			} else { // even, bot2's turn			
-				// get the move index
-				move = move2(board);
-				side = bot2_chip;
-			}*/
-			if (count%2 == 1){
+	//this is more effective than while loop
+	(function game() {
+		if (!end_game) {
+	        side = '';
+			if (count%2 == 1){		//odd, bot1's turn
 				bot = bot1;
 				side = bot1_chip;
-			} else {
+			} else {				//even, bot2's turn
 				bot = bot2;
-				side = bot2_side;
+				side = bot2_chip;
 			}
+			//Execute Code for both Python and JS code
+			game_functions.executeCode(bot, board, function(index){
+				try {
+					if (index instanceof Error){
+						throw new Error('badmove');			//throw an error if bad move is detected
+					} else {
+						move = index;
+					}
+					// place the chip with the move index
+					chip = game_functions.placeChip(board, side, move);
+					//console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
+					//console.log("board: \n", board);
+					// update board
+					board[chip['row']][chip['column']] = side;
 
-			//move = //execute the bot
-			//TODO: HANDLE PYTHON CODE
-			move = game_functions.executeCode(bot, board);
+					// add the board to steps array
+					steps.push(board);
 
-			// place the chip with the move index
-			chip = game_functions.placeChip(board, side, move);
-			// update board
-			board[chip['row']][chip['column']] = side;
+					// check winning
+					end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
 
-			// add the board to steps array
-			steps.push(board);
-
-			// check winning
-			end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
-
-			if (end_game) {
-				//TODO: update_score(winner_bot, loser_bot);
-				if (count%2 == 1) {
-					result['winner'] = 'bot1';
-				} else { //			
-					result['winner'] = 'bot2';
+					if (end_game) {
+						//TODO: update_score(winner_bot, loser_bot);
+						if (count%2 == 1) {
+							result.winner = 'bot1';
+						} else { //			
+							result.winner = 'bot2';
+						}
+					}
+					count += 1;
+					game();
+				} catch (err) {							//catch the bad move error and stop the game
+					result.winner = '';
+					result.bad_move = count%2 == 1 ? 'bot1' : 'bot2';
+					end_game = true;
+					console.log("game interupted with bad move:", err.message);
+					game();
 				}
-			}
-			
-			count += 1;
-		} catch(err) {
-			console.log(err);
-			// bad move detected
-			result['winner'] = '';
-			result['bad_move'] = count%2 == 1 ? 'bot1' : 'bot2';
-			end_game = true;
-		}
-	}
-
-	// add steps to result
-	result['steps'] = steps;
-
-	// return game result
-	res.send(result);
+			});
+    	} else {
+    		// add steps to result
+			result.steps = steps;
+			console.log(result);
+			// return game result
+			res.send(result);
+    	}
+	}()); //end function game()
 }
 
 function get_user_bots(req, res, next){
@@ -597,7 +576,7 @@ server.get('/index', index);
 server.get('/leaderboard', leaderboard);
 server.post('/login', login);
 server.post('/submit_bot', submit_bot);
-server.post('/play', play);
+server.get('/play', play);
 
 //for debug purpose
 server.get('/execute_code', execute_code);
