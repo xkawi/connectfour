@@ -189,7 +189,7 @@ var game_functions = {
 				for (var i = userbots.length - 1; i >= 0; i--) {
 					var bot = {
 						"userid": key,
-						"bot": userbots[i]
+						"bots": userbots[i]
 					}
 					bots.push(bot)
 				};
@@ -200,11 +200,16 @@ var game_functions = {
 	getUserBots: function(uid, fn){
 		var botsRef = new Firebase(FIREBASE_ROOT_PATH + uid + "/bots");
 		botsRef.once("value", function(snapshots){
+			var userbots = {
+				'userid': uid,
+				'bots': []
+			}
 			var data = snapshots.val();
 			if (data !== null){ //if there are bots
-				return fn(data);
+				userbots.bots = data;
+				return fn(userbots);
 			} else {
-				return fn(new Array());
+				return fn(userbots);
 			}
 		})
 	},
@@ -295,7 +300,79 @@ var game_functions = {
 		});
 	},
 	updateBotScore: function(win_bot, lose_bot){
-		//win_bot.userid + /bots + win_bot.id + /score
+		//calculate new score for both
+		var default_score = 200;
+		
+		var new_winner_score = win_bot.score + default_score;
+		var new_loser_score = lose_bot.score + 0;
+
+		//add or remove score depending on the constraint
+		var score_diff = win_bot.score - lose_bot.score; //current score difference
+		if (score_diff < -400){ // e.g. winner: 800 and loser: 1500; hence winner get more score
+			new_winner_score += 100;
+		} else if (score_diff > 400) {	//e.g. winner: 1500 and loser: 800; hence winner get less than default
+			new_winner_score -= 100;
+		}
+
+		var success_save = {
+			'win_bot': true,
+			'lose_bot': true
+		}
+		
+		//update winner score and win stat
+		var winRef = new Firebase("https://cloudcomputing.firebaseio.com/" + win_bot.userid + "/bots/" + win_bot.botid);
+		winRef.update({'score': new_winner_score}, function(error){
+			console.log("error in updating winner score: ", error);
+		});
+		winRef.child('win').transaction(function(currentData){
+			//console.log("win currentData win: ", currentData);
+			if (currentData !== null){
+				return currentData + 1;
+			} else {
+				return currentData;
+			}
+		}, function(err, committed, snapshot){
+			if (err) {
+				console.log('Unable to save to Database (' + err + ")");
+				success_save.win_bot = false;
+			} else if (!committed) {
+				console.log('Updating Score Aborted!',committed, err);
+				success_save.win_bot = false;
+			} else {
+				console.log('success');
+				success_save.win_bot = true;
+			}
+		}, false);
+		//update loser score and lose stat
+		var loseRef = new Firebase("https://cloudcomputing.firebaseio.com/" + lose_bot.userid + "/bots/" + lose_bot.botid);
+		loseRef.update({'score': new_loser_score}, function(error){
+			console.log("error in updating winner score: ", error);
+		});
+		loseRef.child('lose').transaction(function(currentData){
+			//console.log("lose currentData lose: ", currentData)
+			if (currentData !== null){
+				return currentData + 1;
+			} else {
+				return currentData;
+			}
+		}, function(err, committed, snapshot){
+			if (err) {
+				console.log('Unable to save to Database (' + err + ")");
+				success_save.win_bot = false;
+			} else if (!committed) {
+				console.log('Updating Score Aborted!',committed, err);
+				success_save.win_bot = false;
+			} else {
+				console.log('success');
+				success_save.win_bot = true;
+			}
+		}, false);
+
+		if (success_save.win_bot && success_save.lose_bot){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
@@ -470,18 +547,20 @@ function submit_bot(req, res, next) {
 function play(req, res, next) {
 	//bot1 = req.params['bot1']; //expected sample: { id: 0, lang: python, code: asdasd}
 	//bot2 = req.params['bot2'];
-	//expected data;
+	//expected data, should be able to send this data, because /index will return all the necessary data;
 	bot1 = {
 		'userid': 'kawi',
-		'code': 'return randint(0,6)',
-		'id': 1,
-		'lang': 'python'
+		'code': 'return Math.floor(Math.random()*7);',
+		'botid': 1,
+		'lang': 'js',
+		'score': 800
 	}
 	bot2 = {
 		'userid': 'bob',
-		'code': 'return randint(0,6)',
-		'id': 0,
-		'lang': 'python'
+		'code': 'return Math.floor(Math.random()*7)',
+		'botid': 0,
+		'lang': 'js',
+		'score': 800
 	}
 	
 	// create empty board, a 2D array
@@ -520,8 +599,8 @@ function play(req, res, next) {
 					}
 					// place the chip with the move index
 					chip = game_functions.placeChip(board, side, move);
-					//console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
-					//console.log("board: \n", board);
+					console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
+					console.log("board: \n", board);
 					// update board
 					board[chip['row']][chip['column']] = side;
 
@@ -535,8 +614,10 @@ function play(req, res, next) {
 						//TODO: update_score(winner_bot, loser_bot);
 						if (count%2 == 1) {
 							result.winner = 'bot1';
+							game_functions.updateBotScore(bot1, bot2);
 						} else { //			
 							result.winner = 'bot2';
+							game_functions.updateBotScore(bot2, bot1);
 						}
 					}
 					count += 1;
@@ -579,7 +660,7 @@ server.post('/submit_bot', submit_bot);
 server.get('/play', play);
 
 //for debug purpose
-server.get('/execute_code', execute_code);
+//server.get('/execute_code', execute_code);
 server.get('/user_bots', get_user_bots)
 //to ensure that the test pass, if fail means something is wrong with the server
 //and travis will notify us

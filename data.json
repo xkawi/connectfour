@@ -6,16 +6,20 @@
 		{
 			"id": 1,
 			"name": "Bot1",
-			"code": "function play_game(board){\n\treturn Math.floor(Math.random()*6);\n}",
+			"code": "return Math.floor(Math.random()*6);",
 			"lang": "js",
-			"score": 800
+			"score": 800, 
+			"win": 0,
+			"lose": 0
 		},
 		{
 			"id": 2,
 			"name": "Bot2",
-			"code": "def play_game(board):\n\treturn randint(0,6) #inclusive",
-			"lang": "py",
-			"score": 800
+			"code": "return randint(0,6)",
+			"lang": "python",
+			"score": 800,
+			"win": 0,
+			"lose": 0
 		}
 		]
 	},
@@ -24,11 +28,13 @@
 		"email": "bob@email.com",
 		"bots": [
 		{
-			"id": "anotherUserbot",
+			"id": 0,
 			"name": "anotherUser's Bot",
-			"code": "def play_game(board):\n\treturn randint(0,6) #inclusive",
-			"lang": "py",
-			"score": 800
+			"code": "return randint(0,6)",
+			"lang": "python",
+			"score": 800,
+			"win": 0,
+			"lose": 0
 		}
 		]
 	}
