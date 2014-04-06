@@ -189,7 +189,7 @@ var game_functions = {
 				for (var i = userbots.length - 1; i >= 0; i--) {
 					var bot = {
 						"userid": key,
-						"bots": userbots[i]
+						"bot": userbots[i]
 					}
 					bots.push(bot)
 				};
@@ -325,7 +325,6 @@ var game_functions = {
 			console.log("error in updating winner score: ", error);
 		});
 		winRef.child('win').transaction(function(currentData){
-			//console.log("win currentData win: ", currentData);
 			if (currentData !== null){
 				return currentData + 1;
 			} else {
@@ -349,7 +348,6 @@ var game_functions = {
 			console.log("error in updating winner score: ", error);
 		});
 		loseRef.child('lose').transaction(function(currentData){
-			//console.log("lose currentData lose: ", currentData)
 			if (currentData !== null){
 				return currentData + 1;
 			} else {
@@ -373,6 +371,12 @@ var game_functions = {
 		} else {
 			return false;
 		}
+	},
+	compareBot: function(a, b){
+		//used to sort bots base on the score
+		if(a.bot['score'] > b.bot['score']) return -1;
+		if(a.bot['score'] < b.bot['score']) return 1;
+		return 0;
 	}
 
 }
@@ -410,56 +414,20 @@ function login(req, res, next) {
 }
 
 function leaderboard(req, res, next) {
-	// get list of bots with proper sorting based on ELO
-	bots = []
-
-	// return bots
-	res.send(bots);
+	//get list of bots (all) and sort it base on the score
+	//the ELO score is applied during the score updating while playing
+	game_functions.getAllBots(function(result){
+		result.sort(game_functions.compareBot);
+		console.log(result);
+		res.json(result);
+	});
 }
 
-/*function execute_code(req, res, next){
-	//pass code and board
-	// 'return Math.floor((Math.random()*7))'
-	var bot = {
-		'user_id': 'kawi',
-		'code': 'return randint(0,6)',
-		'id': 1,
-		'lang': 'python'
-	}
-	var board = game_functions.initBoard();
-	//console.log('board: ', board);
-	//console.log('bot: ', bot);
-	var move = '';
-	game_functions.executeCode(bot, board, function(result){
-		try {
-			if (result instanceof Error){
-				move = 'bad move';
-				throw new Error('bad move');
-			} else {
-				move = result;
-				console.log('move inside callback and if in execute_code: ', move);
-			}
-			console.log("result instanceof error: ", result instanceof Error);
-			console.log('typeof result:', typeof result);
-			//move = result;
-			res.send(200, move);
-		} catch (err) {
-			res.send(200, 'badmove');
-			console.log('bad move detected');
-		}
-	});
-	
-	//console.log('move outside callback: ', move);
-	//res.send(200, move);
-}*/
-
 function submit_bot(req, res, next) {
-	bot = req.params['bot']; // move function in text
-	lang = req.params['lang']; // programming language
-	user_id = req.params['fb_id']; // get user fb_id
-	//user_id = 'kawi';
-	//lang = 'js';
-	//bot = 'return Math.floor((Math.random()*7))';
+	bot = req.params['bot']; // move function in text (example of value: 'return Math.floor((Math.random()*7))' )
+	lang = req.params['lang']; // programming language (example: 'js')
+	user_id = req.params['userid']; // get user userid
+
 	success = false;
 	code = '';
 	tests = '';
@@ -512,7 +480,7 @@ function submit_bot(req, res, next) {
         	}
 
         	move = result['results'][0]['received'];
-        	console.log("move here: ", move);
+        	
         	// check move result validity
         	if (parseInt(move) >= 0 && parseInt(move) <= 6) {
         		success = true;
@@ -530,8 +498,11 @@ function submit_bot(req, res, next) {
         			'lose': 0
         		}
         		game_functions.saveBot(user_id, b);
+        		res.json({"success": success, "bot": b});
+        	} else {
+        		res.json({"success": false});
         	}
-        	res.send(200, {"success": success});
+        	
         });
     }).on('error', function(e) {
     	console.log("Got error: " + e.message);
@@ -545,10 +516,10 @@ function submit_bot(req, res, next) {
 }
 
 function play(req, res, next) {
-	//bot1 = req.params['bot1']; //expected sample: { id: 0, lang: python, code: asdasd}
-	//bot2 = req.params['bot2'];
-	//expected data, should be able to send this data, because /index will return all the necessary data;
-	bot1 = {
+	bot1 = req.params['bot1'];
+	bot2 = req.params['bot2'];
+	//expected data: should be able to construct this data at client side, because /index will return all the necessary data;
+	/*bot1 = {
 		'userid': 'kawi',
 		'code': 'return Math.floor(Math.random()*7);',
 		'botid': 1,
@@ -561,8 +532,9 @@ function play(req, res, next) {
 		'botid': 0,
 		'lang': 'js',
 		'score': 800
-	}
-	
+	}*/
+	//to test the play method: uncomment the json for bot1 and bot2; and change the route from POST to GET
+
 	// create empty board, a 2D array
 	board = game_functions.initBoard(); //7x6
 	// init counter
@@ -593,14 +565,18 @@ function play(req, res, next) {
 			game_functions.executeCode(bot, board, function(index){
 				try {
 					if (index instanceof Error){
-						throw new Error('badmove');			//throw an error if bad move is detected
+						throw new Error('badmove');	//throw an error if bad move is detected
 					} else {
 						move = index;
 					}
+
 					// place the chip with the move index
 					chip = game_functions.placeChip(board, side, move);
-					console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
-					console.log("board: \n", board);
+
+					//uncomment to see the game play on the server's terminal (local computer)
+					//console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
+					//console.log("board: \n", board);
+
 					// update board
 					board[chip['row']][chip['column']] = side;
 
@@ -611,7 +587,7 @@ function play(req, res, next) {
 					end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
 
 					if (end_game) {
-						//TODO: update_score(winner_bot, loser_bot);
+						//update_score(winner_bot, loser_bot);
 						if (count%2 == 1) {
 							result.winner = 'bot1';
 							game_functions.updateBotScore(bot1, bot2);
@@ -633,37 +609,20 @@ function play(req, res, next) {
     	} else {
     		// add steps to result
 			result.steps = steps;
-			console.log(result);
 			// return game result
 			res.send(result);
     	}
 	}()); //end function game()
 }
 
-function get_user_bots(req, res, next){
-	console.log(req.query);
-	var uid = req.query["userid"];
-	if (uid){
-		game_functions.getUserBots(uid, function(bots){
-			res.send(200, bots);
-		});
-	} else {
-		res.send(200, {"error": true, "message": "missing userid parameter"});
-	}
-}
-
-// routes
+//DEFINE ROUTES
 server.get('/index', index);
 server.get('/leaderboard', leaderboard);
 server.post('/login', login);
 server.post('/submit_bot', submit_bot);
-server.get('/play', play);
+server.post('/play', play);
 
-//for debug purpose
-//server.get('/execute_code', execute_code);
-server.get('/user_bots', get_user_bots)
-//to ensure that the test pass, if fail means something is wrong with the server
-//and travis will notify us
+//ONE UNIT TESTING FOR THE ENTIRE APP USING TRAVIS-CL
 server.get('/test', function(req, res, next){
 	res.send(200, 'success');
 })
@@ -674,14 +633,7 @@ server.get('/', restify.serveStatic({
 	default: 'index.html'
 }));
 
-//ANOTHER WAY OF HANDLING THE ROUTING
-//var PATH = '/votes';
-//server.get({path: '/'}, respond);
-//server.get({path: PATH+'/res', version: '0.0.1'}, respond);
-//server.post({path: PATH+'/init', version: '0.0.1'}, init_db);
-//server.get('/', respond);
-
-// run 
+//RUN APPLICATION
 var port = process.env.PORT || 5000;
 server.listen(port, function() {
 	console.log("Listening on " + port);
