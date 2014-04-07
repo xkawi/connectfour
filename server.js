@@ -573,7 +573,7 @@ function play(req, res, next) {
 	// first move
 	board_in_string = "";
 	for (var i = 0; i < board.length; i++) {
-		for (var j = 0; j < board.length; j++) {
+		for (var j = 0; j < board[i].length; j++) {
 			board_in_string += (board[i][j]+",");
 		}
 		board_in_string += '\n';
@@ -612,7 +612,7 @@ function play(req, res, next) {
 
 					board_in_string = "";
 					for (var i = 0; i < board.length; i++) {
-						for (var j = 0; j < board.length; j++) {
+						for (var j = 0; j < board[i].length; j++) {
 							board_in_string += (board[i][j]+",");
 						}
 						board_in_string += '\n';
