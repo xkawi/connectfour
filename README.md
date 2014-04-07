@@ -167,6 +167,7 @@ Existing User (example)
 **Request**: 
 
 type: application/json
+
 values:
 	
 	{
@@ -208,7 +209,9 @@ Success (JSON):
 **Request**: 
 
 type: application/json
+
 value:
+
 	{
 		'bot1': {
 			'userid': 'kawi',
