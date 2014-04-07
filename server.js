@@ -25,7 +25,7 @@ function findByEmail(uid, email, fn) {
 		if (exists && user.email === email) {
 			return fn(null, snapshot.val())
 		} else {
-			return fn(null, null);
+			return fn('not exist', null);
 		}
 	});
 }
@@ -33,8 +33,19 @@ function findByEmail(uid, email, fn) {
 function createUser(uid, email, fn){
 	//first bot
 	var user = {
+		'id': uid,
 		"email": email,
-		"bots": []
+		"bots": [
+			{
+				'code': "return randint(0,6)",
+				'id': 0,
+				'lang': "js",
+				'lose': 0,
+				'name': "Bot0",
+				'score': 800,
+				'win': 0
+			}
+		]
 	}
 	var userRef = new Firebase(FIREBASE_ROOT_PATH + "/" + uid);
 	userRef.update(user); //update to firebase
@@ -207,10 +218,8 @@ var game_functions = {
 			var data = snapshots.val();
 			if (data !== null){ //if there are bots
 				userbots.bots = data;
-				return fn(userbots);
-			} else {
-				return fn(userbots);
 			}
+			return fn(userbots);
 		})
 	},
 	executeCode: function(bot, board, callback){
@@ -396,17 +405,19 @@ function login(req, res, next) {
 	if (email && fbid){
 		// check if user exists
 		findByEmail(fbid, email, function(err, user){
-			if (err) { res.send(err); }
 			// if user does not exist
-			if (!user) {
+			if (err && !user) {
         		// create user and save to firebase
         		createUser(fbid, email, function(err, user){
-        			if (err) { res.send(err); }
-        			res.json(user);
+        			if (err) {
+        				res.send(err);
+        			} else {
+        				res.json(user);
+        			}
         		});
+        	} else { //else if exist return the user
+        		res.json(user);
         	}
-        	// create session, how?
-        	res.json(user);
         });
 	} else {
 		res.json({"error": "missing username or email"});
@@ -476,7 +487,7 @@ function submit_bot(req, res, next) {
         	// invalid syntax
         	if (result['errors'] != null && result['errors'] != '') {
         		success = false;
-        		res.send(200, {"success": success, "error": "invalid syntax"});
+        		res.json({"success": success, "error": "invalid syntax"});
         	}
 
         	move = result['results'][0]['received'];
@@ -498,9 +509,9 @@ function submit_bot(req, res, next) {
         			'lose': 0
         		}
         		game_functions.saveBot(user_id, b);
-        		res.json({"success": success, "bot": b});
+        		res.json({"success": success, "error": null, "bot": b});
         	} else {
-        		res.json({"success": false});
+        		res.json({"success": false, "error": "bot cause invalid move"});
         	}
         	
         });
@@ -518,6 +529,7 @@ function submit_bot(req, res, next) {
 function play(req, res, next) {
 	bot1 = req.params['bot1'];
 	bot2 = req.params['bot2'];
+
 	//expected data: should be able to construct this data at client side, because /index will return all the necessary data;
 	/*bot1 = {
 		'userid': 'kawi',
