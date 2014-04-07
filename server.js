@@ -546,8 +546,10 @@ function submit_bot(req, res, next) {
 function play(req, res, next) {
 	//bot1 = req.params['bot1'];
 	//bot2 = req.params['bot2'];
-	console.log("params for play:", req.params);
-	var form = {
+	var botplayers = req.params['bots'];
+	var form = JSON.parse(botplayers);
+	console.log("params for play:", req.params, "; value of form: ", form);
+	/*{
 		'bot1': {
 			'userid': 'kawi',
 			'botid': 1
@@ -556,7 +558,7 @@ function play(req, res, next) {
 			'userid': 'bob',
 			'botid': 0
 		}
-	}
+	}*/
 	game_functions.getUserBot(form.bot1['userid'], form.bot1['botid'], function(b1){
 		var bot1 = b1;
 		console.log('bot1: ', bot1);
