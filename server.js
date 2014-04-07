@@ -18,11 +18,11 @@ server.use(restify.bodyParser());
 server.use(restify.CORS());
 
 /*======LOGIN RELATED FUNCTIONS=====*/
-function findByEmail(uid, email, fn) {
+function findByEmail(uid, fn) {
 	rootRef.child(uid).once('value', function(snapshot) {
 		var user = snapshot.val();
 		var exists = (user !== null);
-		if (exists && user.email === email) {
+		if (exists) {
 			return fn(null, snapshot.val())
 		} else {
 			return fn('not exist', null);
@@ -36,15 +36,15 @@ function createUser(uid, email, fn){
 		'id': uid,
 		"email": email,
 		"bots": [
-			{
-				'code': "return randint(0,6)",
-				'id': 0,
-				'lang': "js",
-				'lose': 0,
-				'name': "Bot0",
-				'score': 800,
-				'win': 0
-			}
+		{
+			'code': "return randint(0,6)",
+			'id': 0,
+			'lang': "js",
+			'lose': 0,
+			'name': "Bot0",
+			'score': 800,
+			'win': 0
+		}
 		]
 	}
 	var userRef = new Firebase(FIREBASE_ROOT_PATH + "/" + uid);
@@ -180,12 +180,11 @@ var game_functions = {
 	},
 	placeChip: function(board, side, column){
 		for (var i = board.length-1; i >= 0; i--) {
-			if (board[i][column] == '') {
+			if (board[i][column] == ' ') {
 				board[i][column] = side;
 				return {"row": i, "column": column};
 			} 
 		}
-
 		return null;
 	},
 	getAllBots: function(fn){
@@ -208,19 +207,30 @@ var game_functions = {
 			return fn(bots);
 		});
 	},
-	getUserBots: function(uid, fn){
-		var botsRef = new Firebase(FIREBASE_ROOT_PATH + uid + "/bots");
+	getUserBot: function(uid, botid, fn){
+		var botsRef = new Firebase(FIREBASE_ROOT_PATH + uid + "/bots/" + botid);
 		botsRef.once("value", function(snapshots){
-			var userbots = {
+			var userbot = {
 				'userid': uid,
-				'bots': []
+				'botid': 0,
+				'code': '',
+				'lang': '',
+				'score': 0,
+				'win': 0,
+				'lose': 0
 			}
 			var data = snapshots.val();
+			//console.log(data);
 			if (data !== null){ //if there are bots
-				userbots.bots = data;
+				userbot.botid = data.id;
+				userbot.code = data.code;
+				userbot.lang = data.lang;
+				userbot.score = data.score;
+				userbot.win = data.win,
+				userbot.lose = data.lose
 			}
-			return fn(userbots);
-		})
+			return fn(userbot);
+		});
 	},
 	executeCode: function(bot, board, callback){
 		var error = '';
@@ -265,13 +275,12 @@ var game_functions = {
 		var board = [];
 		columns = 7;
 		rows = 6;
-
 		// init empty board
 		for (var i = 0; i < rows; i++) {
 			board.push([]);
 
 			for (var j = 0; j < columns; j++) { 
-				board[i].push('');
+				board[i].push(' ');
 			}
 		}
 
@@ -331,7 +340,7 @@ var game_functions = {
 		//update winner score and win stat
 		var winRef = new Firebase("https://cloudcomputing.firebaseio.com/" + win_bot.userid + "/bots/" + win_bot.botid);
 		winRef.update({'score': new_winner_score}, function(error){
-			console.log("error in updating winner score: ", error);
+			//console.log("error in updating winner score: ", error);
 		});
 		winRef.child('win').transaction(function(currentData){
 			if (currentData !== null){
@@ -354,7 +363,7 @@ var game_functions = {
 		//update loser score and lose stat
 		var loseRef = new Firebase("https://cloudcomputing.firebaseio.com/" + lose_bot.userid + "/bots/" + lose_bot.botid);
 		loseRef.update({'score': new_loser_score}, function(error){
-			console.log("error in updating winner score: ", error);
+			//console.log("error in updating winner score: ", error);
 		});
 		loseRef.child('lose').transaction(function(currentData){
 			if (currentData !== null){
@@ -395,7 +404,6 @@ var game_functions = {
 		}
 		ref.push(b);
 	}
-
 }
 
 
@@ -407,12 +415,12 @@ function index(req, res, next) {
 }
 
 function login(req, res, next) {
-	email = req.params['email'];
+	//email = req.params['email'];
 	userid = req.params['userid']; //change to fbid
 	//console.log(email, username, req.params)
-	if (email && fbid){
+	if (userid){
 		// check if user exists
-		findByEmail(userid, email, function(err, user){
+		findByEmail(userid, function(err, user){
 			// if user does not exist
 			if (err && !user) {
         		// create user and save to firebase
@@ -523,9 +531,9 @@ function submit_bot(req, res, next) {
         	}
         	
         });
-    }).on('error', function(e) {
-    	console.log("Got error: " + e.message);
-    });
+}).on('error', function(e) {
+	console.log("Got error: " + e.message);
+});
 
     // send HTTP request
     request.write(querystring.stringify({
@@ -537,105 +545,118 @@ function submit_bot(req, res, next) {
 function play(req, res, next) {
 	//bot1 = req.params['bot1'];
 	//bot2 = req.params['bot2'];
-
-	//expected data: should be able to construct this data at client side, because /index will return all the necessary data;
-	bot1 = {
-		'userid': 'kawi',
-		'code': 'return Math.floor(Math.random()*7);',
-		'botid': 1,
-		'lang': 'js',
-		'score': 800
+	var form = {
+		'bot1': {
+			'userid': 'kawi',
+			'botid': 0
+		},
+		'bot2': {
+			'userid': 'bob',
+			'botid': 0
+		}
 	}
-	bot2 = {
-		'userid': 'bob',
-		'code': 'return Math.floor(Math.random()*7)',
+	/*
+	{
+		'userid': uid,
 		'botid': 0,
-		'lang': 'js',
-		'score': 800
+		'code': 'return randint(0,6)',
+		'lang': 'python',
+		'score': 800,
+		'win': 0,
+		'lose': 0
 	}
-	//to test the play method: uncomment the json for bot1 and bot2; and change the route from POST to GET
+	*/
+	game_functions.getUserBot(form.bot1['userid'], form.bot1['botid'], function(b1){
+		var bot1 = b1;
+		console.log('bot1: ', bot1);
+		game_functions.getUserBot(form.bot2['userid'], form.bot2['botid'], function(b2){
+			var bot2 = b2;
+			console.log('bot2:', bot2);
 
-	// create empty board, a 2D array
-	board = game_functions.initBoard(); //7x6
-	// init counter
-	count = 1;
-	// assign chips
-	bot1_chip = 'R'; // bot1 will have Red chip - R
-	bot2_chip = 'W'; // bot2 will have White chip - W
-	// winning tracker
-	end_game = false;
-	result = {};
-	steps = [];
-	move = -1;
+			// create empty board, a 2D array
+			var board = game_functions.initBoard(); //7x6
+			// init counter
+			var count = 1;
+			// assign chips
+			var bot1_chip = 'R'; // bot1 will have Red chip - R
+			var bot2_chip = 'W'; // bot2 will have White chip - W
+			// winning tracker
+			var end_game = false;
+			var result = {};
+			var steps = [];
+			var move = -1;
 
-	// first move
-	steps.push(board);
-	//this is more effective than while loop
-	(function game() {
-		if (!end_game) {
-	        side = '';
-			if (count%2 == 1){		//odd, bot1's turn
-				bot = bot1;
-				side = bot1_chip;
-			} else {				//even, bot2's turn
-				bot = bot2;
-				side = bot2_chip;
-			}
-			//Execute Code for both Python and JS code
-			game_functions.executeCode(bot, board, function(index){
-				try {
-					if (index instanceof Error){
-						throw new Error('badmove');	//throw an error if bad move is detected
-					} else {
-						move = index;
+			//var steps = game_functions.steps();
+			steps.push(board);
+
+			//this is more effective than while loop
+			(function game() {
+				
+				var bot, side, chip;
+				if (!end_game) {
+					side = '';
+					if (count%2 == 1){		//odd, bot1's turn
+						bot = bot1;
+						side = bot1_chip;
+					} else {				//even, bot2's turn
+						bot = bot2;
+						side = bot2_chip;
 					}
+					game_functions.executeCode(bot, board, function(index){
+						try {
+							if (index instanceof Error){
+								throw new Error('badmove');	//throw an error if bad move is detected
+							} else {
+								move = index;
+							}
 
-					// place the chip with the move index
-					chip = game_functions.placeChip(board, side, move);
+							// place the chip with the move index
+							chip = game_functions.placeChip(board, side, move);
 
-					//uncomment to see the game play on the server's terminal (local computer)
-					console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
-					console.log("board: \n", board);
+							//uncomment to see the game play on the server's terminal (local computer)
+							console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
+							console.log("board: \n", board);
 
-					// update board
-					board[chip['row']][chip['column']] = side;
+							// update board
+							board[chip['row']][chip['column']] = side;
 
-					// add the board to steps array
-					steps.push(board);
-					console.log("steps:", steps);
-					// check winning
-					end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
+							// add step
+							steps.push(board);
 
-					if (end_game) {
-						//update_score(winner_bot, loser_bot);
-						if (count%2 == 1) {
-							result.winner = 'bot1';
-							game_functions.updateBotScore(bot1, bot2);
-							game_functions.saveWinBot(bot1);
-						} else { //			
-							result.winner = 'bot2';
-							game_functions.updateBotScore(bot2, bot1);
-							game_functions.saveWinBot(bot2);
+							// check winning
+							end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
+
+							if (end_game) {
+								//update_score(winner_bot, loser_bot);
+								if (count%2 == 1) {
+									result.winner = bot1.userid;
+									game_functions.updateBotScore(bot1, bot2);
+									game_functions.saveWinBot(bot1);
+								} else { //			
+									result.winner = bot2.userid;
+									game_functions.updateBotScore(bot2, bot1);
+									game_functions.saveWinBot(bot2);
+								}
+							}
+							count += 1;
+							game();
+						} catch (err) {							//catch the bad move error and stop the game
+							result.winner = '';
+							result.bad_move = count%2 == 1 ? 'bot1' : 'bot2';
+							end_game = true;
+							console.log("game interupted with bad move:", err.message);
+							game();
 						}
-					}
-					count += 1;
-					game();
-				} catch (err) {							//catch the bad move error and stop the game
-					result.winner = '';
-					result.bad_move = count%2 == 1 ? 'bot1' : 'bot2';
-					end_game = true;
-					console.log("game interupted with bad move:", err.message);
-					game();
+					});
+				} else {
+		    		// add steps to result
+		    		result['steps'] = steps;
+					// return game result
+					res.send(result);
 				}
-			});
-    	} else {
-    		console.log("steps: ", steps);
-    		// add steps to result
-			result['steps'] = steps;
-			// return game result
-			res.send(result);
-    	}
-	}()); //end function game()
+			}()); //end function game()
+		});
+	});	
 }
 
 //DEFINE ROUTES
