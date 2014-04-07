@@ -180,7 +180,7 @@ var game_functions = {
 	},
 	placeChip: function(board, side, column){
 		for (var i = board.length-1; i >= 0; i--) {
-			if (board[i][column] == '') {
+			if (board[i][column] == '_') {
 				board[i][column] = side;
 				return {"row": i, "column": column};
 			} 
@@ -271,7 +271,7 @@ var game_functions = {
 			board.push([]);
 
 			for (var j = 0; j < columns; j++) { 
-				board[i].push('');
+				board[i].push('_');
 			}
 		}
 
@@ -560,8 +560,18 @@ function play(req, res, next) {
 	steps = [];
 	move = -1;
 
+	step = 1;
+
 	// first move
-	steps.push(board);
+	board_in_string = "";
+	for (var i = 0; i < board.length; i++) {
+		for (var j = 0; j < board.length; j++) {
+			board_in_string += (board[i][j]+",");
+		}
+		board_in_string += '\n';
+	}
+	steps.push(board_in_string);
+
 	//this is more effective than while loop
 	(function game() {
 		if (!end_game) {
@@ -586,15 +596,27 @@ function play(req, res, next) {
 					chip = game_functions.placeChip(board, side, move);
 
 					//uncomment to see the game play on the server's terminal (local computer)
-					console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
-					console.log("board: \n", board);
+					//console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
+					//console.log("board: \n", board);
 
 					// update board
 					board[chip['row']][chip['column']] = side;
 
+					board_in_string = "";
+					for (var i = 0; i < board.length; i++) {
+						for (var j = 0; j < board.length; j++) {
+							board_in_string += (board[i][j]+",");
+						}
+						board_in_string += '\n';
+					}
+					steps.push(board_in_string);
+
 					// add the board to steps array
-					steps.push(board);
-					console.log("steps:", steps);
+					//steps.push(board.join());
+					//console.log(board.join());
+
+					step += 1;
+					//console.log("steps:", steps);
 					// check winning
 					end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
 
