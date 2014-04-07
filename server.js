@@ -290,14 +290,14 @@ var game_functions = {
 	saveBot: function(uid, bot){
 		var ref = new Firebase("https://cloudcomputing.firebaseio.com/" + uid + "/bots");
 		ref.transaction(function(currentData){
-			console.log(currentData);
+			//console.log(currentData);
 			if (currentData !== null){
 				bot.id = currentData.length
 				bot.name = "Bot" + (currentData.length).toString();
-				currentData.push(b);
+				currentData.push(bot);
 				return currentData;
 			} else {//no bot yet
-				return [b];
+				return [bot];
 			}
 		}, function(err, committed, snapshot){
 			var reply = {
@@ -452,10 +452,18 @@ function leaderboard(req, res, next) {
 }
 
 function submit_bot(req, res, next) {
-	bot = req.params['bot']; // move function in text (example of value: 'return Math.floor((Math.random()*7))' )
-	lang = req.params['lang']; // programming language (example: 'js')
-	user_id = req.params['userid']; // get user userid
-	console.log('req.params for submit_bot:', req.params);
+	req.header('application/json');
+	var jsonform = req.body;
+	//console.log("req.body:", jsonform, typeof jsonform);
+	bot = jsonform.bot; // move function in text (example of value: 'return Math.floor((Math.random()*7))' )
+	lang = jsonform.lang; // programming language (example: 'js')
+	user_id = jsonform.userid; // get user userid
+	/* sample data
+	{
+		'bot': 'code',
+		'lang': 'python',
+		'userid': 'userid'
+	}*/
 	success = false;
 	code = '';
 	tests = '';
@@ -544,21 +552,9 @@ function submit_bot(req, res, next) {
 }
 
 function play(req, res, next) {
-	//bot1 = req.params['bot1'];
-	//bot2 = req.params['bot2'];
-	var botplayers = req.params['bots'];
-	var form = JSON.parse(botplayers);
-	console.log("params for play:", req.params, "; value of form: ", form);
-	/*{
-		'bot1': {
-			'userid': 'kawi',
-			'botid': 1
-		},
-		'bot2': {
-			'userid': 'bob',
-			'botid': 0
-		}
-	}*/
+	req.accepts('application/json');
+	var form = req.body;
+	console.log(form, typeof form);
 	game_functions.getUserBot(form.bot1['userid'], form.bot1['botid'], function(b1){
 		var bot1 = b1;
 		console.log('bot1: ', bot1);

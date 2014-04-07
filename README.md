@@ -166,11 +166,15 @@ Existing User (example)
 
 **Request**: 
 
-x-www-form-urlencoded
-keys:
-	'bot' - the actual code of the bot without method definition
-	'lang' - the code language (only 2 possible value: 'python' or 'js')
-	'userid' - the user id (also called facebook ID) of the bot
+type: application/json
+values:
+	
+	{
+		'bot': 'actual code writtern by the user',
+		'lang': 'python',
+		'userid': 'user id or facebook id'
+	}
+
 
 **Response**:
 
@@ -203,8 +207,8 @@ Success (JSON):
 
 **Request**: 
 
-x-www-form-urlencoded (converted into JSON format)
-key 'bots' value(looks like below in JSON):
+type: application/json
+value:
 	{
 		'bot1': {
 			'userid': 'kawi',
