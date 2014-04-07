@@ -531,9 +531,9 @@ function submit_bot(req, res, next) {
         	}
         	
         });
-}).on('error', function(e) {
-	console.log("Got error: " + e.message);
-});
+	}).on('error', function(e) {
+		console.log("Got error: " + e.message);
+	});
 
     // send HTTP request
     request.write(querystring.stringify({
@@ -555,17 +555,6 @@ function play(req, res, next) {
 			'botid': 0
 		}
 	}
-	/*
-	{
-		'userid': uid,
-		'botid': 0,
-		'code': 'return randint(0,6)',
-		'lang': 'python',
-		'score': 800,
-		'win': 0,
-		'lose': 0
-	}
-	*/
 	game_functions.getUserBot(form.bot1['userid'], form.bot1['botid'], function(b1){
 		var bot1 = b1;
 		console.log('bot1: ', bot1);
@@ -644,10 +633,12 @@ function play(req, res, next) {
 								//update_score(winner_bot, loser_bot);
 								if (count%2 == 1) {
 									result.winner = bot1.userid;
+									result.bad_move = null;
 									game_functions.updateBotScore(bot1, bot2);
 									game_functions.saveWinBot(bot1);
 								} else { //			
 									result.winner = bot2.userid;
+									result.bad_move = null;
 									game_functions.updateBotScore(bot2, bot1);
 									game_functions.saveWinBot(bot2);
 								}
