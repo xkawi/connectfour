@@ -400,15 +400,15 @@ function index(req, res, next) {
 
 function login(req, res, next) {
 	email = req.params['email'];
-	fbid = req.params['fbid']; //change to fbid
+	userid = req.params['userid']; //change to fbid
 	//console.log(email, username, req.params)
 	if (email && fbid){
 		// check if user exists
-		findByEmail(fbid, email, function(err, user){
+		findByEmail(userid, email, function(err, user){
 			// if user does not exist
 			if (err && !user) {
         		// create user and save to firebase
-        		createUser(fbid, email, function(err, user){
+        		createUser(userid, email, function(err, user){
         			if (err) {
         				res.send(err);
         			} else {
@@ -527,11 +527,11 @@ function submit_bot(req, res, next) {
 }
 
 function play(req, res, next) {
-	bot1 = req.params['bot1'];
-	bot2 = req.params['bot2'];
+	//bot1 = req.params['bot1'];
+	//bot2 = req.params['bot2'];
 
 	//expected data: should be able to construct this data at client side, because /index will return all the necessary data;
-	/*bot1 = {
+	bot1 = {
 		'userid': 'kawi',
 		'code': 'return Math.floor(Math.random()*7);',
 		'botid': 1,
@@ -544,7 +544,7 @@ function play(req, res, next) {
 		'botid': 0,
 		'lang': 'js',
 		'score': 800
-	}*/
+	}
 	//to test the play method: uncomment the json for bot1 and bot2; and change the route from POST to GET
 
 	// create empty board, a 2D array
@@ -586,15 +586,15 @@ function play(req, res, next) {
 					chip = game_functions.placeChip(board, side, move);
 
 					//uncomment to see the game play on the server's terminal (local computer)
-					//console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
-					//console.log("board: \n", board);
+					console.log("round: ", count, "\tPlayer/Side: ", side, "\tmove:", move);
+					console.log("board: \n", board);
 
 					// update board
 					board[chip['row']][chip['column']] = side;
 
 					// add the board to steps array
 					steps.push(board);
-
+					console.log("steps:", steps);
 					// check winning
 					end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
 
@@ -619,8 +619,9 @@ function play(req, res, next) {
 				}
 			});
     	} else {
+    		console.log("steps: ", steps);
     		// add steps to result
-			result.steps = steps;
+			result['steps'] = steps;
 			// return game result
 			res.send(result);
     	}
@@ -632,7 +633,7 @@ server.get('/index', index);
 server.get('/leaderboard', leaderboard);
 server.post('/login', login);
 server.post('/submit_bot', submit_bot);
-server.post('/play', play);
+server.get('/play', play);
 
 //ONE UNIT TESTING FOR THE ENTIRE APP USING TRAVIS-CL
 server.get('/test', function(req, res, next){
