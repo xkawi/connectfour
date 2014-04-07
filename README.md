@@ -171,9 +171,9 @@ type: application/json
 values:
 	
 	{
-		'bot': 'actual code writtern by the user',
-		'lang': 'python',
-		'userid': 'user id or facebook id'
+		"bot": "actual code written by the user",
+		"lang": "python or js",
+		"userid": "user id or facebook id"
 	}
 
 
@@ -213,13 +213,13 @@ type: application/json
 value:
 
 	{
-		'bot1': {
-			'userid': 'kawi',
-			'botid': 1
+		"bot1": {
+			"userid": "kawi",
+			"botid": "1"
 		},
-		'bot2': {
-			'userid': 'bob',
-			'botid': 0
+		"bot2": {
+			"userid": "bob",
+			"botid": "0"
 		}
 	}
 	
