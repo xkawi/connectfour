@@ -30,11 +30,10 @@ function findByEmail(uid, fn) {
 	});
 }
 
-function createUser(uid, email, fn){
+function createUser(uid, fn){
 	//first bot
 	var user = {
 		'id': uid,
-		"email": email,
 		"bots": [
 		{
 			'code': "return randint(0,6)",
@@ -424,7 +423,7 @@ function login(req, res, next) {
 			// if user does not exist
 			if (err && !user) {
         		// create user and save to firebase
-        		createUser(userid, email, function(err, user){
+        		createUser(userid, function(err, user){
         			if (err) {
         				res.send(err);
         			} else {
