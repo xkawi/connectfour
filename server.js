@@ -189,12 +189,14 @@ var game_functions = {
 	getAllBots: function(fn){
 		rootRef.once("value", function(snapshots){
 			var data = snapshots.val();
+			//console.log(data);
 			var bots = []
 			for (key in data) {
-				if (!data.hasOwnProperty(key)) {
+				if (!data.hasOwnProperty(key) || key == 'winning_bots') {
 					continue;//The current property is not a direct property	
 				}
 				var userbots = data[key]['bots'];
+				//console.log(userbots, userbots.length);
 				for (var i = userbots.length - 1; i >= 0; i--) {
 					var bot = {
 						"userid": key,
@@ -444,7 +446,7 @@ function leaderboard(req, res, next) {
 	//the ELO score is applied during the score updating while playing
 	game_functions.getAllBots(function(result){
 		result.sort(game_functions.compareBot);
-		console.log(result);
+		//console.log(result);
 		res.json(result);
 	});
 }
@@ -453,7 +455,7 @@ function submit_bot(req, res, next) {
 	bot = req.params['bot']; // move function in text (example of value: 'return Math.floor((Math.random()*7))' )
 	lang = req.params['lang']; // programming language (example: 'js')
 	user_id = req.params['userid']; // get user userid
-
+	console.log('req.params for submit_bot:', req.params);
 	success = false;
 	code = '';
 	tests = '';
@@ -544,6 +546,7 @@ function submit_bot(req, res, next) {
 function play(req, res, next) {
 	//bot1 = req.params['bot1'];
 	//bot2 = req.params['bot2'];
+	console.log("params for play:", req.params);
 	var form = {
 		'bot1': {
 			'userid': 'kawi',
@@ -668,7 +671,7 @@ server.get('/index', index);
 server.get('/leaderboard', leaderboard);
 server.post('/login', login);
 server.post('/submit_bot', submit_bot);
-server.get('/play', play);
+server.post('/play', play);
 
 //ONE UNIT TESTING FOR THE ENTIRE APP USING TRAVIS-CL
 server.get('/test', function(req, res, next){

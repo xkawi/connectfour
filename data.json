@@ -1,10 +1,8 @@
 {
 	"kawi": {
-		"id": 123,
-		"email": "hello@hello.com",
 		"bots": [
 		{
-			"id": 1,
+			"id": 0,
 			"name": "Bot1",
 			"code": "return Math.floor(Math.random()*6);",
 			"lang": "js",
@@ -13,7 +11,7 @@
 			"lose": 0
 		},
 		{
-			"id": 2,
+			"id": 1,
 			"name": "Bot2",
 			"code": "return randint(0,6)",
 			"lang": "python",
@@ -24,8 +22,6 @@
 		]
 	},
 	"bob": {
-		"id": 234,
-		"email": "bob@email.com",
 		"bots": [
 		{
 			"id": 0,
