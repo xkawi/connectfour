@@ -180,7 +180,7 @@ var game_functions = {
 	},
 	placeChip: function(board, side, column){
 		for (var i = board.length-1; i >= 0; i--) {
-			if (board[i][column] == ' ') {
+			if (board[i][column] == '_') {
 				board[i][column] = side;
 				return {"row": i, "column": column};
 			} 
@@ -280,7 +280,7 @@ var game_functions = {
 			board.push([]);
 
 			for (var j = 0; j < columns; j++) { 
-				board[i].push(' ');
+				board[i].push('_');
 			}
 		}
 
@@ -548,7 +548,7 @@ function play(req, res, next) {
 	var form = {
 		'bot1': {
 			'userid': 'kawi',
-			'botid': 0
+			'botid': 1
 		},
 		'bot2': {
 			'userid': 'bob',
@@ -586,8 +586,15 @@ function play(req, res, next) {
 			var steps = [];
 			var move = -1;
 
-			//var steps = game_functions.steps();
-			steps.push(board);
+			// first move
+			var board_in_string = "";
+			for (var i = 0; i < board.length; i++) {
+				for (var j = 0; j < board[i].length; j++) {
+					board_in_string += (board[i][j]+",");
+				}
+				board_in_string += '\n';
+			}
+			steps.push(board_in_string);
 
 			//this is more effective than while loop
 			(function game() {
@@ -621,7 +628,14 @@ function play(req, res, next) {
 							board[chip['row']][chip['column']] = side;
 
 							// add step
-							steps.push(board);
+							var board_in_string = "";
+							for (var i = 0; i < board.length; i++) {
+								for (var j = 0; j < board[i].length; j++) {
+									board_in_string += (board[i][j]+",");
+								}
+								board_in_string += '\n';
+							}
+							steps.push(board_in_string);
 
 							// check winning
 							end_game = game_functions.checkWinner(board, chip['row'], chip['column']);
