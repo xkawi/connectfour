@@ -205,24 +205,15 @@ Success (JSON):
 
 x-www-form-urlencoded (converted into JSON format)
 
-*bot1*
-	
 	{
-		'userid': 'kawi',
-		'code': 'return Math.floor(Math.random()*7);',
-		'botid': 1,
-		'lang': 'js',
-		'score': 800
-	}
-	
-*bot2*
-
-	{
-		'userid': 'bob',
-		'code': 'return randint(0,6)',
-		'botid': 0,
-		'lang': 'python',
-		'score': 800
+		'bot1': {
+			'userid': 'kawi',
+			'botid': 1
+		},
+		'bot2': {
+			'userid': 'bob',
+			'botid': 0
+		}
 	}
 	
 

@@ -386,6 +386,14 @@ var game_functions = {
 		if(a.bot['score'] > b.bot['score']) return -1;
 		if(a.bot['score'] < b.bot['score']) return 1;
 		return 0;
+	},
+	saveWinBot: function(bot){
+		var ref = new Firebase("https://cloudcomputing.firebaseio.com/winning_bots");
+		var b = {
+			"code": bot.code,
+			"lang": bot.lang
+		}
+		ref.push(b);
 	}
 
 }
@@ -625,9 +633,11 @@ function play(req, res, next) {
 						if (count%2 == 1) {
 							result.winner = 'bot1';
 							game_functions.updateBotScore(bot1, bot2);
+							game_functions.saveWinBot(bot1);
 						} else { //			
 							result.winner = 'bot2';
 							game_functions.updateBotScore(bot2, bot1);
+							game_functions.saveWinBot(bot2);
 						}
 					}
 					count += 1;
