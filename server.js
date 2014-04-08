@@ -559,7 +559,7 @@ function submit_bot(req, res, next) {
         		// save to db if bot exists
         		// otherwise update and save a revision
         		var b = {
-        			'code': code,
+        			'code': bot,
         			'lang': lang,
         			'score': 800,
         			'win': 0,
@@ -654,7 +654,7 @@ function edit_bot(req, res, next) {
         		success = true;
 
         		var b = {
-        			'code': code,
+        			'code': bot,
         			'lang': lang,
         			'id': bot_id,
         			'name': botname
