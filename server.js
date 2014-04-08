@@ -17,6 +17,12 @@ server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.use(restify.CORS());
 server.use(restify.fullResponse());
+
+restify.CORS.ALLOW_HEADERS.push( 'Access-Control-Allow-Origin' );
+server.use(restify.CORS({ headers: [ 'Access-Control-Allow-Origin' ], origins: ['*'] }));
+server.use(restify.fullResponse());
+
+
 //server.use(ecstatic({ root: __dirname + '/' }));
 
 /*======LOGIN RELATED FUNCTIONS=====*/
