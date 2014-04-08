@@ -322,22 +322,28 @@
           $("#caption").html("Oh hello again, " + response.name + ". We really missed you...");
           CURRENT_USER = response.id;
           // Call /login with FBID
-          $.post(C4_API + "/login", {
-            userid: response.id
-          }, function(data) {
-            //alert("result gotten" + data);
-            // Hide FB connect button
-            $("#fbconnect-btn").hide();
+          $.ajax({
+            type: "POST",
+            url: C4_API + "/login",
+            data: JSON.stringify({userid: response.id}),
+            crossDomain: true,
+            dataType: 'json',
+            success: function(data) {
+              //alert("result gotten" + data);
+              // Hide FB connect button
+              $("#fbconnect-btn").hide();
 
-            $(".result").html(data);
-            appBotList(data);
-          });
+              $(".result").html(data);
+              appBotList(data);
+            }
         });
-      }
 
-      function appBotList(data) {
-        $.getJSON(C4_API + "/index", function(bots) {
-          
+      });
+    }
+
+function appBotList(data) {
+  $.getJSON(C4_API + "/index", function(bots) {
+
           // Wipe list!
           $('#leftbot').empty();
           $('#rightbot').empty();
@@ -395,7 +401,8 @@ $("#letsplay").click(function(event){
     type: 'POST',
     data: JSON.stringify(args),
     contentType: "application/json",
-    dataType: "json",
+    crossDomain: true,
+    dataType: 'json',
     success: function(data){
             //console.log(data);
 
@@ -451,7 +458,8 @@ $("#newbot-btn").click(function(event){
     type: 'POST',
     data: JSON.stringify(args),
     contentType: "application/json",
-    dataType: "json",
+    crossDomain: true,
+    dataType: 'json',
     success: function(data){
             //...
             console.log(data);
@@ -467,7 +475,6 @@ $("#newbot-btn").click(function(event){
             }
           } 
         });
-
 });
 
       // Not very efficient, but works...
@@ -487,15 +494,15 @@ $("#newbot-btn").click(function(event){
       });
 
       </script>
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-49812275-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-  </body>
-</html>
+      <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      </script>
+      <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-49812275-1");
+        pageTracker._trackPageview();
+      } catch(err) {}
+      </script>
+    </body>
+    </html>
