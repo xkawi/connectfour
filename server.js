@@ -414,14 +414,18 @@ var game_functions = {
 
 /*=========FUNCTIONS FOR ALL THE ROUTES===========*/
 function index(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*")
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.header("Access-Control-Allow-Methods", "*");
 	game_functions.getAllBots(function(bots){
 		res.json(bots);
 	});
 }
 
 function login(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*")
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.header("Access-Control-Allow-Methods", "*");
 	//email = req.params['email'];
 	var data = req.body;
 	userid = data.userid; //change to fbid
@@ -456,7 +460,9 @@ function login(req, res, next) {
 }
 
 function leaderboard(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*")
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.header("Access-Control-Allow-Methods", "*");
 	//get list of bots (all) and sort it base on the score
 	//the ELO score is applied during the score updating while playing
 	game_functions.getAllBots(function(result){
@@ -467,7 +473,9 @@ function leaderboard(req, res, next) {
 }
 
 function submit_bot(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*")
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.header("Access-Control-Allow-Methods", "*");
 	req.header('application/json');
 	var jsonform = req.body;
 
@@ -570,7 +578,9 @@ function submit_bot(req, res, next) {
 }
 
 function edit_bot(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*")
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.header("Access-Control-Allow-Methods", "*");
 	req.accepts('application/json');
 	var form = req.body;
 	bot = form.bot; // move function in text (example of value: 'return Math.floor((Math.random()*7))' )
@@ -665,7 +675,9 @@ function edit_bot(req, res, next) {
 
 function play(req, res, next) {
 	req.accepts('application/json');
-	res.header("Access-Control-Allow-Origin", "*")
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.header("Access-Control-Allow-Methods", "*");
 	var form = req.body;
 	req.params['bot1']
 	console.log(form, typeof form);
