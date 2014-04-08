@@ -736,12 +736,12 @@ function play(req, res, next) {
 							if (end_game) {
 								//update_score(winner_bot, loser_bot);
 								if (count%2 == 1) {
-									result.winner = bot1.userid;
+									result.winner = { 'userid': bot1.userid, 'botid': bot1.botid };
 									result.bad_move = null;
 									game_functions.updateBotScore(bot1, bot2);
 									game_functions.saveWinBot(bot1);
 								} else { //			
-									result.winner = bot2.userid;
+									result.winner = { 'userid': bot1.userid, 'botid': bot1.botid };
 									result.bad_move = null;
 									game_functions.updateBotScore(bot2, bot1);
 									game_functions.saveWinBot(bot2);
@@ -750,8 +750,8 @@ function play(req, res, next) {
 							count += 1;
 							game();
 						} catch (err) {							//catch the bad move error and stop the game
-							result.winner = '';
-							result.bad_move = count%2 == 1 ? bot1.userid : bot2.userid;
+							result.winner = null;
+							result.bad_move = count%2 == 1 ? {'userid':bot1.userid,'botid':bot1.botid} : {'userid':bot2.userid,'botid':bot2.botid};
 							end_game = true;
 							console.log("game interupted with bad move:", err.message);
 							game();
