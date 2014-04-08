@@ -54,12 +54,16 @@
     float: left;
     width: 14%;
     height: 3em;
-    background-color: red;
+    background-color: white;
     margin: 1px;
   }
 
   .cover-container {
     width: 800px;
+  }
+
+  .modal-content {
+    color: black;
   }
   </style>
 
@@ -91,7 +95,7 @@
 
           <div class="cover-container">
 
-            <div class="masthead clearfix">
+            <div class="clearfix">
               <div class="inner">
                 <h3 class="masthead-brand">Connect 4</h3>
                 <ul class="nav masthead-nav">
@@ -203,7 +207,7 @@
       <!-- Leaderboard Modal -->
       <div class="modal fade" id="leaderboardModal" tabindex="-1" role="dialog" aria-labelledby="leaderboardModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
+          <div class="modal-content" style="color:black">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
               <h4 class="modal-title" id="leaderboardModalLabel">Leaderboard</h4>
@@ -420,6 +424,11 @@ $("#letsplay").click(function(event){
                 for (var y = 0;  y < points.length; y++) {
                   if (points[y] != "_") {
                     $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").html(points[y]);
+                    if (points[y] == "R"){
+                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('background', 'red');
+                    } else {
+                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('background', 'yellow');
+                    }
                   }  
                 }
               }
