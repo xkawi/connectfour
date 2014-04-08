@@ -417,6 +417,7 @@ function index(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	res.header("Access-Control-Allow-Methods", "*");
+
 	game_functions.getAllBots(function(bots){
 		res.json(bots);
 	});
@@ -804,7 +805,7 @@ server.get('/test', function(req, res, next){
 })
 
 //SERVE STATIC/PUBLIC FILE
-server.get('/?.*/', restify.serveStatic({
+server.get('/', restify.serveStatic({
   directory: './public',
   default: 'index.html'
 }));
