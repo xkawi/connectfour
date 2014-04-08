@@ -209,6 +209,7 @@ var game_functions = {
 				for (var i = userbots.length - 1; i >= 0; i--) {
 					var bot = {
 						"userid": key,
+						"name": data[key]['name'],
 						"bot": userbots[i]
 					}
 					bots.push(bot)
