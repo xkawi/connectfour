@@ -1,5 +1,6 @@
 {
 	"kawi": {
+		"name": "Kawi",
 		"bots": [
 		{
 			"id": 0,
@@ -22,6 +23,7 @@
 		]
 	},
 	"bob": {
+		"name": "Bob",
 		"bots": [
 		{
 			"id": 0,

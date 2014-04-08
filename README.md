@@ -46,13 +46,14 @@ Once pushed, Travis-Cl will automatically deploy it to Heroku.
 
 **Request**:
 
-x-www-form-urlencoded
+Type: application/json
 
-```
-email - the email that the user type in (or facebook email)
+Options:
 
-userid - can be the facebook ID of the user or any unique string
-```
+	{
+		'userid': 'userid',
+		'name': 'name'
+	}
 
 **Response**:
 
@@ -173,7 +174,8 @@ values:
 	{
 		"bot": "actual code written by the user",
 		"lang": "python or js",
-		"userid": "user id or facebook id"
+		"userid": "user id or facebook id",
+		"bot_name": "name of the bot"
 	}
 
 
@@ -197,6 +199,49 @@ Success (JSON):
 			'id': 0,
 			'lang': lang,
 			'name': "Bot0",
+			'score': 800,
+			'win': 0,
+			'lose': 0
+		}
+    }
+
+### POST /edit_bot
+
+**Request**: 
+
+type: application/json
+
+values:
+	
+	{
+		"bot": "actual code written by the user",
+		"lang": "python or js",
+		"bot_id": "id of the bot",
+		"userid": "user id or facebook id",
+		"bot_name": "name of the bot"
+	}
+
+
+**Response**:
+
+Syntax Error (JSON):
+
+	{"success": false, "error": "invalid syntax"}
+	
+Bad Move (JSON):
+
+	{"success": false, "error": "bot cause invalid move"}
+
+Success (JSON):
+
+	{
+		"success": true,
+		"error": null,
+		"bot": {
+			'code': code,
+			'id': 0,
+			'lang': 'lang',
+			'name': 'Bot0',
 			'score': 800,
 			'win': 0,
 			'lose': 0

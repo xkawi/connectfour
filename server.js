@@ -30,10 +30,11 @@ function findByEmail(uid, fn) {
 	});
 }
 
-function createUser(uid, fn){
+function createUser(uid, name, fn){
 	//first bot
 	var user = {
 		'id': uid,
+		'name': name,
 		"bots": [
 		{
 			'code': "return randint(0,6)",
@@ -293,12 +294,11 @@ var game_functions = {
 			//console.log(currentData);
 			if (currentData !== null){
 				bot.id = currentData.length
-				bot.name = "Bot" + (currentData.length).toString();
+				//bot.name = "Bot" + (currentData.length).toString();
 				currentData.push(bot);
 				return currentData;
 			} else {//no bot yet
 				bot.id = 0;
-				bot.name = "Bot0";
 				return [bot];
 			}
 		}, function(err, committed, snapshot){
@@ -419,7 +419,15 @@ function index(req, res, next) {
 
 function login(req, res, next) {
 	//email = req.params['email'];
-	userid = req.params['userid']; //change to fbid
+	var data = req.body;
+	userid = data.userid; //change to fbid
+	name = data.name;
+	/*
+	{
+		'userid': 'userid',
+		'name': 'name'
+	}
+	*/
 	//console.log(email, username, req.params)
 	if (userid){
 		// check if user exists
@@ -460,6 +468,7 @@ function submit_bot(req, res, next) {
 	bot = jsonform.bot; // move function in text (example of value: 'return Math.floor((Math.random()*7))' )
 	lang = jsonform.lang; // programming language (example: 'js')
 	user_id = jsonform.userid; // get user userid
+	botname = jsonform.bot_name
 	/* sample data
 	{
 		'bot': 'code',
@@ -531,7 +540,8 @@ function submit_bot(req, res, next) {
         			'lang': lang,
         			'score': 800,
         			'win': 0,
-        			'lose': 0
+        			'lose': 0,
+        			'name': botname
         		}
         		game_functions.saveBot(user_id, b);
         		res.json({"success": success, "error": null, "bot": b});
@@ -558,6 +568,7 @@ function edit_bot(req, res, next) {
 	lang = form.lang; // programming language (example: 'js')
 	bot_id = form.bot_id;
 	user_id = form.userid; // get user userid
+	botname = form.bot_name;
 
 	success = false;
 	code = '';
@@ -619,7 +630,8 @@ function edit_bot(req, res, next) {
         		var b = {
         			'code': code,
         			'lang': lang,
-        			'id': bot_id
+        			'id': bot_id,
+        			'name': botname
         		}
         		//ref link to the object
         		var ref = new Firebase("https://cloudcomputing.firebaseio.com/" + user_id + "/bots/" + bot_id);
