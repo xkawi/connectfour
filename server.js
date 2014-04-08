@@ -551,6 +551,97 @@ function submit_bot(req, res, next) {
     request.end();
 }
 
+function edit_bot(req, res, next) {
+	req.accepts('application/json');
+	var form = req.body;
+	bot = form.bot; // move function in text (example of value: 'return Math.floor((Math.random()*7))' )
+	lang = form.lang; // programming language (example: 'js')
+	bot_id = form.bot_id;
+	user_id = form.userid; // get user userid
+
+	success = false;
+	code = '';
+	tests = '';
+	verified_results = '';
+
+	// validate python
+	if (lang == 'python') {
+		code = 'def move(board):\n  '+bot;
+		tests = ">>> move('WHATEVER')\n  'ANYTHING'\n";
+	} else { // validate javascript
+		code = 'function move(board) {\n '+bot+' \n}';
+		tests = "assert_equal('ANYTHING', move([[]]))";
+	}
+
+	jsonrequest = {
+		"solution": code,
+		"tests": tests
+	}
+
+	// prepare data for verifier
+	var json_data = querystring.stringify({
+		jsonrequest : JSON.stringify(jsonrequest)
+	});
+
+	// configure verifer settings
+	var options = {
+		host : '162.222.183.53',
+		path : '/' + lang,
+		method : 'POST',
+		headers : {
+			'Content-Type' : 'application/x-www-form-urlencoded',
+			'Content-Length' : json_data.length
+		}
+	};
+
+    // create HTTP request
+    var request = http.request(options, function(response) {
+    	// Handle data received
+    	response.on('data', function(chunk) {
+    		verified_results += chunk.toString();
+    	});
+
+        // process returned data
+        response.on("end", function() {
+        	result = JSON.parse(verified_results);
+        	// invalid syntax
+        	if (result['errors'] != null && result['errors'] != '') {
+        		success = false;
+        		res.json({"success": success, "error": "invalid syntax"});
+        	}
+
+        	move = result['results'][0]['received'];
+        	
+        	// check move result validity
+        	if (parseInt(move) >= 0 && parseInt(move) <= 6) {
+        		success = true;
+
+        		var b = {
+        			'code': code,
+        			'lang': lang,
+        			'id': bot_id
+        		}
+        		//ref link to the object
+        		var ref = new Firebase("https://cloudcomputing.firebaseio.com/" + user_id + "/bots/" + bot_id);
+        		ref.update(b);
+
+        		res.json({"success": success, "error": null, "bot": b});
+        	} else {
+        		res.json({"success": false, "error": "bot cause invalid move"});
+        	}
+        	
+        });
+	}).on('error', function(e) {
+		console.log("Got error: " + e.message);
+	});
+
+    // send HTTP request
+    request.write(querystring.stringify({
+    	jsonrequest : JSON.stringify(jsonrequest)
+    }));
+    request.end();
+}
+
 function play(req, res, next) {
 	req.accepts('application/json');
 	var form = req.body;
@@ -669,6 +760,7 @@ server.get('/index', index);
 server.get('/leaderboard', leaderboard);
 server.post('/login', login);
 server.post('/submit_bot', submit_bot);
+server.post('/edit_bot', edit_bot);
 server.post('/play', play);
 
 //ONE UNIT TESTING FOR THE ENTIRE APP USING TRAVIS-CL
