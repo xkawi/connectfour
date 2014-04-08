@@ -451,7 +451,7 @@ function login(req, res, next) {
 			// if user does not exist
 			if (err && !user) {
         		// create user and save to firebase
-        		createUser(userid, function(err, user){
+        		createUser(userid, name, function(err, user){
         			if (err) {
         				res.send(err);
         			} else {

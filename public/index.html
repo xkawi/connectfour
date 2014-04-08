@@ -339,7 +339,8 @@
           CURRENT_USER = response.id;
           // Call /login with FBID
           $.post(C4_API + "/login", {
-            userid: response.id
+            userid: response.id,
+            name: response.name,
           }, function(data) {
             //alert("result gotten" + data);
             // Hide FB connect button
@@ -427,7 +428,7 @@ $("#letsplay").click(function(event){
                     $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").html(points[y]);
                     if (points[y] == "R"){
                       $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('background', 'red');
-                    } else {
+                    } else if (points[y] == "W"){
                       $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('background', 'yellow');
                     }
                   }  
