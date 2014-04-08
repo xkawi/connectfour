@@ -39,7 +39,7 @@ function createUser(uid, name, fn){
 		{
 			'code': "return randint(0,6)",
 			'id': 0,
-			'lang': "js",
+			'lang': "python",
 			'lose': 0,
 			'name': "Bot0",
 			'score': 800,
