@@ -1,78 +1,493 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="shortcut icon" href="http://getbootstrap.com/assets/ico/favicon.ico">
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Connectfour : connectfour app for cloud computing" />
+  <title>Cover Template for Bootstrap</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 
-    <title>Connectfour</title>
-  </head>
+  <!-- Custom styles for this template -->
+  <link href="http://getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
+  <!--<link href="style.css" rel="stylesheet">-->
 
-  <body>
+  <style type="text/css">
+  #botselector pre {
+    text-align: left;
+  }
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/neoborn/connectfour">View on GitHub</a>
+  #botselector .stats {
+    float: right;
+  }
 
-          <h1 id="project_title">Connectfour</h1>
-          <h2 id="project_tagline">connectfour app for cloud computing</h2>
+  #botselector .panel-title {
+    text-align: left;
+  }
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/neoborn/connectfour/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/neoborn/connectfour/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+  #botselector .panel-heading {
+    background-image: none;
+  }
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+  #botselector .panel-heading.lang-python {
+    background-color: #366e9c;
+    color: #fff;
+  }
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+  #botselector .panel-heading.lang-js {
+    background-color: #f0db4f;  
+  }
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+  #gamearea ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  #gamearea ul li {
+    display: block;
+    float: left;
+    width: 14%;
+    height: 3em;
+    background-color: red;
+    margin: 1px;
+  }
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+  .cover-container {
+    width: 800px;
+  }
+  </style>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+  <!-- Just for debugging purposes. Don't actually copy this line! -->
+  <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    </head>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+    <body>
+      <div id="fb-root"></div>
+      <div class="site-wrapper">
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+        <div class="site-wrapper-inner">
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+          <div class="cover-container">
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+            <div class="masthead clearfix">
+              <div class="inner">
+                <h3 class="masthead-brand">Connect 4</h3>
+                <ul class="nav masthead-nav">
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="#" data-toggle="modal" data-target="#leaderboardModal">Leaderboard</a></li>
+                  <li><a href="#" data-toggle="modal" data-target="#submitModal">Submit New Bot</a></li>
+                </ul>
+              </div>
+            </div>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+            <div class="inner cover">
+              <h1 id="screentitle" class="cover-heading">Welcome to Connect 4</h1>
+              <p id="caption" class="lead">You can login to our awesome game via Facebook!</p>
+              <p class="lead">
+                <div id="fbconnect-btn">
+                  <fb:login-button show-faces="false" size="xlarge"></fb:login-button>
+                </div>
+                <div class="result"></div>
+                <div id="gamearea">
+                  <ul>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Connectfour maintained by <a href="https://github.com/neoborn">neoborn</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
 
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    
+                  </ul>
+                  <p id="winner-msg">
+                    Winner message goes here
+                  </p>
+                </div>
+                <div id="botselector">
+
+                  <!-- accordian start -->
+                  <div class="panel-group col-md-6" id="leftbot">
+
+                  </div>
+                  <!-- accordian end -->
+
+                  <!-- accordian start -->
+                  <div class="panel-group col-md-6" id="rightbot">
+
+                  </div>
+                  <!-- accordian end -->
+
+                  <div class="col-md-12">
+                    You have selected:
+                    <p id="botlineup">#leftbot vs #rightbot</p>
+                    <a id="letsplay" href="#" class="btn btn-primary btn-lg" role="button">Let's play Connect 4!</a>
+                  </div>
+                </div>
+              </p>
+            </div>
+
+            <div class="mastfoot">
+              <div class="inner">
+                <p>Connect 4, by <a href="https://github.com/Dino198">Dino198</a>, <a href="https://github.com/neoborn">neoborn</a>, <a href="https://github.com/erwinhuang1612">erwinhuang1612</a> and <a href="https://github.com/kelvinnn/">kelvinnn</a>.</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Leaderboard Modal -->
+      <div class="modal fade" id="leaderboardModal" tabindex="-1" role="dialog" aria-labelledby="leaderboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="leaderboardModalLabel">Leaderboard</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <tr>
+                  <th>User ID</th>
+                  <th>Bot ID</th>
+                  <th>Language</th>
+                  <th>Wins</th>
+                  <th>Losses</th>
+                  <th>Score</th>
+                </tr>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Modal -->
+      <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="submitModalLabel">Submit New Bot</h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal" role="form">
+                <div class="form-group">
+                  <label for="newbot-name" class="col-sm-3 control-label">Bot Name</label>
+                  <div class="col-sm-9">
+                    <input name="newbot-name" type="text" class="form-control" id="newbot-name" placeholder="Your Bot's Name">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="newbot-type" class="col-sm-3 control-label">Language</label>
+                  <div class="col-sm-9">
+                    <select name="newbot-type" id="newbot-type" class="form-control">
+                      <option value="js">JavaScript</option>
+                      <option value="python">Python</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="newbot-code" class="col-sm-3 control-label">Raw Bot Code</label>
+                  <span id="newbot-error" class="label label-danger">Error message goes here!</span>
+                  <div class="col-sm-9">
+                    <textarea name="newbot-code" id="newbot-code" class="form-control" rows="3"></textarea>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button id="newbot-btn" type="button" class="btn btn-primary">Submit New Bot</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="http://getbootstrap.com/assets/js/docs.min.js"></script>
+
+    <script>
+
+    var C4_API = "http://cloud-connectfour.herokuapp.com";
+    var CURRENT_USER = "";
+
+    appStartup();
+
+      // Facebook Connect Stuff 
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1433430370237330',
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+
+        FB.Event.subscribe('auth.authResponseChange', function(response) {
+          if (response.status === 'connected') {
+          //testAPI();
+          appLogin();
+        } else if (response.status === 'not_authorized') {
+          FB.login();
+        } else {
+          FB.login();
+        }
+      });
+      };
+
+      // Load the SDK asynchronously
+      (function(d){
+       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       ref.parentNode.insertBefore(js, ref);
+     }(document));
+
+      // Test function
+      function testAPI() {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function(response) {
+          console.log('Good to see you, ' + response.name + '.');
+        });
+      }
+
+      function appStartup() {
+        $("#botselector").hide();
+      }
+
+      function appLogin() {
+        FB.api('/me', function(response) {
+          //console.log('Good to see you, ' + response.name + '.');
+          console.log('appLogin fired. Logging in with ' + response.id);
+          $("#screentitle").html("Pick some bots and we'll play!");
+          $("#caption").html("Oh hello again, " + response.name + ". We really missed you...");
+          CURRENT_USER = response.id;
+          // Call /login with FBID
+          $.post(C4_API + "/login", {
+            userid: response.id
+          }, function(data) {
+            //alert("result gotten" + data);
+            // Hide FB connect button
+            $("#fbconnect-btn").hide();
+
+            $(".result").html(data);
+            appBotList(data);
+          });
+        });
+      }
+
+      function appBotList(data) {
+        $.getJSON(C4_API + "/index", function(bots) {
+          
+          // Wipe list!
+          $('#leftbot').empty();
+          $('#rightbot').empty();
+
+          $.each(bots, function(index, value) {
+            // Populate lists
+            var active = "";
+            if (index == 0) {
+              active = " in";
+            }
+            $('#leftbot').append('<div class="panel panel-default"><div class="panel-heading lang-' + value.bot.lang + '"><h4 class="panel-title"><span class="label label-info">' + value.bot.score + '</span> <a data-toggle="collapse" data-parent="#leftbot" href="#' + value.userid + '-' + value.bot.id + '-left">' + value.userid + ' - ' + value.bot.name + '</a><span class="stats"><span class="label label-success">' + value.bot.win + '</span><span class="label label-danger">' + value.bot.lose + '</span></span></h4></div><div id="' + value.userid + '-' + value.bot.id + '-left" class="panel-collapse collapse' + active + '"><div class="panel-body"><pre>' + value.bot.code + '</pre></div></div></div>');
+
+            $('#rightbot').append('<div class="panel panel-default"><div class="panel-heading lang-' + value.bot.lang + '"><h4 class="panel-title"><span class="label label-info">' + value.bot.score + '</span> <a data-toggle="collapse" data-parent="#rightbot" href="#' + value.userid + '-' + value.bot.id + '-right">' + value.userid + ' - ' + value.bot.name + '</a><span class="stats"><span class="label label-success">' + value.bot.win + '</span><span class="label label-danger">' + value.bot.lose + '</span></span></h4></div><div id="' + value.userid + '-' + value.bot.id + '-right" class="panel-collapse collapse' + active + '"><div class="panel-body"><pre>' + value.bot.code + '</pre></div></div></div>');
+          });
+selectBot();
+});
+
+
+$("#botselector").show();
+
+}
+
+$('#leaderboardModal').on('show.bs.modal', function (e) {
+        // Get new leaderboard stats
+        $.getJSON(C4_API + "/leaderboard", function(bots) {
+          $("#leaderboardModal table tr:gt(0)").remove();
+          $.each(bots, function(index, value) {
+            $("#leaderboardModal table").append('<tr><td>' + value.userid + '</td><td>' + value.bot.id + '</td><td>' + value.bot.lang + '</td><td>' + value.bot.win + '</td><td>' + value.bot.lose + '</td><td>' + value.bot.score + '</td></tr>');
+          });
+        });
+      });
+
+function selectBot(){
+  $('#botlineup').html($('#leftbot .in').parent().find('h4.panel-title a').text() + " vs " + $('#rightbot .in').parent().find('h4.panel-title a').text());
+}
+
+$("#letsplay").click(function(event){
+  event.preventDefault();
+  var leftbot = $('#leftbot .in').parent().find('h4.panel-title a').attr('href');
+  var rightbot = $('#rightbot .in').parent().find('h4.panel-title a').attr('href');
+
+  var args = {
+    bot1: {
+      userid: leftbot.split("-")[0].substring(1),
+      botid: leftbot.split("-")[1],
+    },
+    bot2: {
+      userid: rightbot.split("-")[0].substring(1),
+      botid: rightbot.split("-")[1],
+    }
+  }
+
+  $.ajax({
+    url: C4_API + '/play',
+    type: 'POST',
+    data: JSON.stringify(args),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(data){
+            //console.log(data);
+
+            // The grid of doomsday.
+            var steps = data['steps'];
+            for (var i = 0; i < steps.length; i++) {
+              var s = steps[i];
+              var rows = s.split('\n');
+              for (var x = 0; x < rows.length; x++) {
+                var points = rows[x].split(',');
+                for (var y = 0;  y < points.length; y++) {
+                  if (points[y] != "_") {
+                    $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").html(points[y]);
+                  }  
+                }
+              }
+            };
+
+            // display winner details
+            if (!data['winner']) {
+              console.log("this is fired");
+              if (!data['bad_move']) {
+                // tie
+                console.log("tie");
+                $("#winner-msg").html("The game has ended in a tie. No more moves are possible!"); 
+              } else {
+                // bad move
+                console.log("bad move");
+                $("#winner-msg").html("User " + data['bad_move']['userid'] + ", bot " + data['bad_move']['botid'] + " has made a bad move. Game is aborted."); 
+              }
+              
+            } else {
+              console.log("winner found");
+              $("#winner-msg").html("The winner is user " + data['winner']['userid'] + ", bot " + deal['winner']['botid']);  
+            }
+            
+          }
+        });
+});
+
+$("#newbot-btn").click(function(event){
+  event.preventDefault();
+
+  var args = {
+    userid: CURRENT_USER,
+    bot_name: $("#newbot-name").val(),
+    bot: $("#newbot-code").val(),
+    lang: $("#newbot-type").val(),
+  }
+
+  $.ajax({
+    url: C4_API + '/submit_bot',
+    type: 'POST',
+    data: JSON.stringify(args),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(data){
+            //...
+            console.log(data);
+            console.log("submitted");
+            if (data.success == true) {
+              $("#submitModal").modal('hide');
+              appLogin();
+            } else {
+              // error with bot code
+              $("#newbot-error").html(data.error);
+              $("#newbot-error").show();
+
+            }
+          } 
+        });
+
+});
+
+      // Not very efficient, but works...
+      $('#leftbot').on('shown.bs.collapse', function () {
+        // Update bot lineup
+        selectBot();
+      });
+
+      $('#rightbot').on('shown.bs.collapse', function () {
+        // Update bot lineup
+        selectBot();
+      });
+
+      $('#submitModal').on('show.bs.modal', function () {
+        // Update bot lineup
+        $("#newbot-error").hide();
+      });
+
+      </script>
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -83,7 +498,5 @@ $ git checkout gh-pages
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
-
-
   </body>
 </html>
