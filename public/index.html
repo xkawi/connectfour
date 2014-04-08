@@ -54,7 +54,7 @@
     float: left;
     width: 14%;
     height: 3em;
-    background-color: white;
+    background-color: red;
     margin: 1px;
   }
 
@@ -340,7 +340,7 @@
           // Call /login with FBID
           $.post(C4_API + "/login", {
             userid: response.id,
-            name: response.name,
+            name: response.name
           }, function(data) {
             //alert("result gotten" + data);
             // Hide FB connect button
@@ -426,11 +426,6 @@ $("#letsplay").click(function(event){
                 for (var y = 0;  y < points.length; y++) {
                   if (points[y] != "_") {
                     $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").html(points[y]);
-                    if (points[y] == "R"){
-                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('background', 'red');
-                    } else if (points[y] == "W"){
-                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('background', 'yellow');
-                    }
                   }  
                 }
               }
