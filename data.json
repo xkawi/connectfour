@@ -88,7 +88,7 @@
             {
                 "id": 1,
                 "name": "Bot1",
-                "code": "for i in range(0,6):\n\tif (i%2==1): return i",
+                "code": "return 1",
                 "lang": "python",
                 "score": 800,
                 "win": 0,

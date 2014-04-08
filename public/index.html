@@ -1,81 +1,147 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link rel="shortcut icon" href="http://getbootstrap.com/assets/ico/favicon.ico">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="http://getbootstrap.com/assets/ico/favicon.ico">
 
-  <title>Cover Template for Bootstrap</title>
+    <title>Connect 4 - Sup!?</title>
 
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 
-  <!-- Custom styles for this template -->
-  <link href="http://getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
-  <!--<link href="style.css" rel="stylesheet">-->
+    <!-- Custom styles for this template -->
+    <link href="http://getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
+    <style type="text/css">
+    #botselector pre {
+      text-align: left;
+    }
 
-  <style type="text/css">
-  #botselector pre {
-    text-align: left;
-  }
+    #botselector .stats {
+      float: right;
+    }
 
-  #botselector .stats {
-    float: right;
-  }
+    #botselector .panel-title {
+      text-align: left;
+    }
 
-  #botselector .panel-title {
-    text-align: left;
-  }
+    #botselector .panel-heading {
+      background-image: none;
+    }
 
-  #botselector .panel-heading {
-    background-image: none;
-  }
+    #botselector .panel.lang-python {
+      border: 1px solid #134975;
+    }
 
-  #botselector .panel-heading.lang-python {
-    background-color: #366e9c;
-    color: #fff;
-  }
+    #botselector .panel.lang-python .panel-heading{
+      background-image:url('http://dl.dropboxusercontent.com/u/59814144/connectfourimg/type-py.png');
+      background-repeat: no-repeat;
+      background-position: 3px 3px;
+      background-color: #366e9c;
+      color: #fff;
+    }
 
-  #botselector .panel-heading.lang-js {
-    background-color: #f0db4f;  
-  }
+    #botselector .panel.lang-js {
+      border: 1px solid #d9c32f;
+    }
 
-  #gamearea ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  #gamearea ul li {
-    display: block;
-    float: left;
-    width: 14%;
-    height: 3em;
-    background-color: white;
-    margin: 1px;
-  }
+    #botselector .panel.lang-js .panel-heading{
+      background-image:url('http://dl.dropboxusercontent.com/u/59814144/connectfourimg/type-js.png');
+      background-repeat: no-repeat;
+      background-position: 3px 3px;
+      background-color: #f0db4f;  
+      color: #fff;
+    }
 
-  .cover-container {
-    width: 800px;
-  }
+    #gamearea ul {
+      list-style-type: none;
+      padding: 0;
+      width: 434px;
+      margin: auto;
+    }
+    #gamearea ul li {
+      display: block;
+      float: left;
+      width: 60px;
+      height: 60px;
+      background-color: white;
+      margin: 1px;
+      padding: 5px;
+    }
 
-  .modal-content {
-    color: black;
-  }
-  </style>
+    .cover-container {
+      width: 800px;
+    }
 
-  <!-- Just for debugging purposes. Don't actually copy this line! -->
-  <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    .mastfoot, .masthead {
+      position: static;
+      width: auto;
+    }
 
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    .circle-yellow {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px; 
+      background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);
+      background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, orange);
+      background-image: radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);
+    }
+
+    .circle-red {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px; 
+      background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, red 0%, orange 100%);
+      background-image: -webkit-radial-gradient(45px 45px, circle cover, red, orange);
+      background-image: radial-gradient(45px 45px 45deg, circle cover, red 0%, orange 100%);
+    }
+
+    /* modal hacks */
+    .modal-content {
+      background-color: #333;
+    }
+
+    .modal-content .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+      background-color: #444;
+    }
+
+    .modal-content .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+      border-top: 1px solid #555;
+    }
+
+    .modal .close {
+      color: #fff;
+      opacity: .8;
+      filter: alpha(opacity=80);
+    }
+
+    body {
+      box-shadow: none; 
+      background: none;
+    }
+
+    html { 
+      background: url('http://dl.dropboxusercontent.com/u/59814144/connectfourimg/kids.jpg') no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+    </style>
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-      <![endif]-->
-      <script>
+    <![endif]-->
+    <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -85,11 +151,11 @@
       ga('send', 'pageview');
 
       </script>
-    </head>
+  </head>
 
-    <body>
-      <div id="fb-root"></div>
-<script>(function(d, s, id) {
+  <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
@@ -97,14 +163,13 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
-      <div id="fb-root"></div>
-      <div class="site-wrapper">
+    <div class="site-wrapper">
 
-        <div class="site-wrapper-inner">
+      <div class="site-wrapper-inner">
 
-          <div class="cover-container">
+        <div class="cover-container">
 
-            <div class="clearfix">
+          <div class="clearfix">
               <div class="inner">
                 <h3 class="masthead-brand">Connect 4</h3>
                 <ul class="nav masthead-nav">
@@ -112,179 +177,179 @@
                   <li><a href="#" data-toggle="modal" data-target="#leaderboardModal">Leaderboard</a></li>
                   <li><a href="#" data-toggle="modal" data-target="#submitModal">Submit New Bot</a></li>
                   <li> <a href="http://neoborn.github.io/connectfour/">How-To Play</a> </li>
-                  <li><div class="fb-share-button" data-href="http://cloud-connectfour.herokuapp.com/" data-type="button_count"></div></li>
+                  <li><div class="fb-share-button" data-href="http://cloud-connectfour.herokuapp.com" data-type="button_count"></div></li>
                 </ul>
               </div>
             </div>
 
 
-
-            <div class="inner cover">
-              <h1 id="screentitle" class="cover-heading">Welcome to Connect 4</h1>
-              <p id="caption" class="lead">You can login to our awesome game via Facebook!</p>
-              <p class="lead">
-                <div id="fbconnect-btn">
-                  <fb:login-button show-faces="false" size="xlarge"></fb:login-button>
-                </div>
-                <div class="result"></div>
-                <div id="gamearea">
-                  <ul>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-
-                  </ul>
-                  <p id="winner-msg">
-                    Winner message goes here
-                  </p>
-                </div>
-                <div id="botselector">
-
-                  <!-- accordian start -->
-                  <div class="panel-group col-md-6" id="leftbot">
-
-                  </div>
-                  <!-- accordian end -->
-
-                  <!-- accordian start -->
-                  <div class="panel-group col-md-6" id="rightbot">
-
-                  </div>
-                  <!-- accordian end -->
-
-                  <div class="col-md-12">
-                    You have selected:
-                    <p id="botlineup">#leftbot vs #rightbot</p>
-                    <a id="letsplay" href="#" class="btn btn-primary btn-lg" role="button">Let's play Connect 4!</a>
-                  </div>
-                </div>
-              </p>
-            </div>
-
-            <!--<div class="mastfoot">
-              <div class="inner">
-                <p>Connect 4, by <a href="https://github.com/Dino198">Dino198</a>, <a href="https://github.com/neoborn">neoborn</a>, <a href="https://github.com/erwinhuang1612">erwinhuang1612</a> and <a href="https://github.com/kelvinnn/">kelvinnn</a>.</p>
+          <div class="inner cover clearfix">
+            <h1 id="screentitle" class="cover-heading">Welcome to Connect 4</h1>
+            <p id="caption" class="lead">You can login to our awesome game via Facebook!</p>
+            <p class="lead">
+              <div id="fbconnect-btn">
+                <fb:login-button show-faces="false" size="xlarge"></fb:login-button>
               </div>
-            </div>-->
+              <div class="result"></div>
+              <div id="gamearea" class="col-md-12">
+                <ul class="clearfix">
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
 
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  <li>&nbsp;</li>
+                  
+                </ul>
+                <p id="winner-msg">
+                &nbsp;
+                </p>
+                <a id="pickdifferent" href="#" class="btn btn-primary btn-lg" role="button">Pick different bots to play!</a>
+              </div>
+              <div id="botselector">
+
+              <!-- accordian start -->
+                <div class="panel-group col-md-6" id="leftbot">
+
+                </div>
+              <!-- accordian end -->
+
+              <!-- accordian start -->
+                <div class="panel-group col-md-6" id="rightbot">
+
+                </div>
+              <!-- accordian end -->
+
+                <div class="col-md-12">
+                  You have selected:
+                  <p id="botlineup">#leftbot vs #rightbot</p>
+                  <a id="letsplay" href="#" class="btn btn-primary btn-lg" role="button">Let's play Connect 4!</a>
+                </div>
+              </div>
+            </p>
+          </div>
+
+          <div class="footer">
+            <div class="inner">
+              <p>Connect 4, by <a href="https://github.com/Dino198">Dino198</a>, <a href="https://github.com/neoborn">neoborn</a>, <a href="https://github.com/erwinhuang1612">erwinhuang1612</a> and <a href="https://github.com/kelvinnn/">kelvinnn</a>.</p>
+            </div>
           </div>
 
         </div>
 
       </div>
 
-      <!-- Leaderboard Modal -->
-      <div class="modal fade" id="leaderboardModal" tabindex="-1" role="dialog" aria-labelledby="leaderboardModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content" style="color:black">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="leaderboardModalLabel">Leaderboard</h4>
-            </div>
-            <div class="modal-body">
-              <table class="table table-striped">
-                <tr>
-                  <th>User ID</th>
-                  <th>Bot ID</th>
-                  <th>Language</th>
-                  <th>Wins</th>
-                  <th>Losses</th>
-                  <th>Score</th>
-                </tr>
-              </table>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
 
-      <!-- Submit Modal -->
-      <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="submitModalLabel">Submit New Bot</h4>
-            </div>
-            <div class="modal-body">
-              <form class="form-horizontal" role="form">
-                <div class="form-group">
-                  <label for="newbot-name" class="col-sm-3 control-label">Bot Name</label>
-                  <div class="col-sm-9">
-                    <input name="newbot-name" type="text" class="form-control" id="newbot-name" placeholder="Your Bot's Name">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="newbot-type" class="col-sm-3 control-label">Language</label>
-                  <div class="col-sm-9">
-                    <select name="newbot-type" id="newbot-type" class="form-control">
-                      <option value="js">JavaScript</option>
-                      <option value="python">Python</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="newbot-code" class="col-sm-3 control-label">Raw Bot Code</label>
-                  <span id="newbot-error" class="label label-danger">Error message goes here!</span>
-                  <div class="col-sm-9">
-                    <textarea name="newbot-code" id="newbot-code" class="form-control" rows="3"></textarea>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button id="newbot-btn" type="button" class="btn btn-primary">Submit New Bot</button>
-            </div>
+    <!-- Leaderboard Modal -->
+    <div class="modal fade" id="leaderboardModal" tabindex="-1" role="dialog" aria-labelledby="leaderboardModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="leaderboardModalLabel">Leaderboard</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-striped">
+              <tr>
+                <th>User ID</th>
+                <th>Bot ID</th>
+                <th>Language</th>
+                <th>Wins</th>
+                <th>Losses</th>
+                <th>Score</th>
+              </tr>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Submit Modal -->
+    <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="submitModalLabel">Submit New Bot</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="newbot-name" class="col-sm-3 control-label">Bot Name</label>
+              <div class="col-sm-9">
+                <input name="newbot-name" type="text" class="form-control" id="newbot-name" placeholder="Your Bot's Name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="newbot-type" class="col-sm-3 control-label">Language</label>
+              <div class="col-sm-9">
+                <select name="newbot-type" id="newbot-type" class="form-control">
+                  <option value="js">JavaScript</option>
+                  <option value="python">Python</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="newbot-code" class="col-sm-3 control-label">Raw Bot Code</label>
+              <span id="newbot-error" class="label label-danger">Error message goes here!</span>
+              <div class="col-sm-9">
+                <textarea name="newbot-code" id="newbot-code" class="form-control" rows="3"></textarea>
+              </div>
+            </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button id="newbot-btn" type="button" class="btn btn-primary">Submit New Bot</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -295,22 +360,23 @@
 
     <script>
 
-    var C4_API = "http://cloud-connectfour.herokuapp.com";
-    var CURRENT_USER = "";
+      var C4_API = "http://cloud-connectfour.herokuapp.com";
+      var CURRENT_USER = "";
+      var CURRENT_BOARD = {};
 
-    appStartup();
+      appStartup();
 
       // Facebook Connect Stuff 
       window.fbAsyncInit = function() {
-        FB.init({
-          appId : '238729719666675',
+      FB.init({
+        appId      : '238729719666675',
         status     : true, // check login status
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
       });
 
-        FB.Event.subscribe('auth.authResponseChange', function(response) {
-          if (response.status === 'connected') {
+      FB.Event.subscribe('auth.authResponseChange', function(response) {
+        if (response.status === 'connected') {
           //testAPI();
           appLogin();
         } else if (response.status === 'not_authorized') {
@@ -328,7 +394,7 @@
        js = d.createElement('script'); js.id = id; js.async = true;
        js.src = "//connect.facebook.net/en_US/all.js";
        ref.parentNode.insertBefore(js, ref);
-     }(document));
+      }(document));
 
       // Test function
       function testAPI() {
@@ -340,9 +406,12 @@
 
       function appStartup() {
         $("#botselector").hide();
+        $("#gamearea").hide();
       }
 
       function appLogin() {
+        appStartup();
+
         FB.api('/me', function(response) {
           //console.log('Good to see you, ' + response.name + '.');
           console.log('appLogin fired. Logging in with ' + response.id);
@@ -351,8 +420,7 @@
           CURRENT_USER = response.id;
           // Call /login with FBID
           $.post(C4_API + "/login", {
-            userid: response.id,
-            name: response.name
+            userid: response.id
           }, function(data) {
             //alert("result gotten" + data);
             // Hide FB connect button
@@ -366,7 +434,7 @@
 
       function appBotList(data) {
         $.getJSON(C4_API + "/index", function(bots) {
-
+          
           // Wipe list!
           $('#leftbot').empty();
           $('#rightbot').empty();
@@ -377,19 +445,19 @@
             if (index == 0) {
               active = " in";
             }
-            $('#leftbot').append('<div class="panel panel-default"><div class="panel-heading lang-' + value.bot.lang + '"><h4 class="panel-title"><span class="label label-info">' + value.bot.score + '</span> <a data-toggle="collapse" data-parent="#leftbot" href="#' + value.userid + '-' + value.bot.id + '-left">' + value.name + ' - ' + value.bot.name + '</a><span class="stats"><span class="label label-success">' + value.bot.win + '</span><span class="label label-danger">' + value.bot.lose + '</span></span></h4></div><div id="' + value.userid + '-' + value.bot.id + '-left" class="panel-collapse collapse' + active + '"><div class="panel-body"><pre>' + value.bot.code + '</pre></div></div></div>');
+            $('#leftbot').append('<div class="panel panel-default lang-' + value.bot.lang + '"><div class="panel-heading"><h4 class="panel-title"><span class="label label-info">' + value.bot.score + '</span> <a data-toggle="collapse" data-parent="#leftbot" href="#' + value.userid + '-' + value.bot.id + '-left">' + value.name + ' - ' + value.bot.name + '</a><span class="stats"><span class="label label-success">' + value.bot.win + '</span><span class="label label-danger">' + value.bot.lose + '</span></span></h4></div><div id="' + value.userid + '-' + value.bot.id + '-left" class="panel-collapse collapse' + active + '"><div class="panel-body"><pre>' + value.bot.code + '</pre></div></div></div>');
 
-            $('#rightbot').append('<div class="panel panel-default"><div class="panel-heading lang-' + value.bot.lang + '"><h4 class="panel-title"><span class="label label-info">' + value.bot.score + '</span> <a data-toggle="collapse" data-parent="#rightbot" href="#' + value.userid + '-' + value.bot.id + '-right">' + value.name + ' - ' + value.bot.name + '</a><span class="stats"><span class="label label-success">' + value.bot.win + '</span><span class="label label-danger">' + value.bot.lose + '</span></span></h4></div><div id="' + value.userid + '-' + value.bot.id + '-right" class="panel-collapse collapse' + active + '"><div class="panel-body"><pre>' + value.bot.code + '</pre></div></div></div>');
+            $('#rightbot').append('<div class="panel panel-default lang-' + value.bot.lang + '"><div class="panel-heading"><h4 class="panel-title"><span class="label label-info">' + value.bot.score + '</span> <a data-toggle="collapse" data-parent="#rightbot" href="#' + value.userid + '-' + value.bot.id + '-right">' + value.name + ' - ' + value.bot.name + '</a><span class="stats"><span class="label label-success">' + value.bot.win + '</span><span class="label label-danger">' + value.bot.lose + '</span></span></h4></div><div id="' + value.userid + '-' + value.bot.id + '-right" class="panel-collapse collapse' + active + '"><div class="panel-body"><pre>' + value.bot.code + '</pre></div></div></div>');
           });
-selectBot();
-});
+          selectBot();
+        });
+        
 
+        $("#botselector").show();
 
-$("#botselector").show();
+      }
 
-}
-
-$('#leaderboardModal').on('show.bs.modal', function (e) {
+      $('#leaderboardModal').on('show.bs.modal', function (e) {
         // Get new leaderboard stats
         $.getJSON(C4_API + "/leaderboard", function(bots) {
           $("#leaderboardModal table tr:gt(0)").remove();
@@ -399,57 +467,68 @@ $('#leaderboardModal').on('show.bs.modal', function (e) {
         });
       });
 
-function selectBot(){
-  $('#botlineup').html($('#leftbot .in').parent().find('h4.panel-title a').text() + " vs " + $('#rightbot .in').parent().find('h4.panel-title a').text());
-}
+      function selectBot(){
+        $('#botlineup').html($('#leftbot .in').parent().find('h4.panel-title a').text() + " vs " + $('#rightbot .in').parent().find('h4.panel-title a').text());
+      }
 
-$("#letsplay").click(function(event){
-  event.preventDefault();
-  var leftbot = $('#leftbot .in').parent().find('h4.panel-title a').attr('href');
-  var rightbot = $('#rightbot .in').parent().find('h4.panel-title a').attr('href');
+      function drawPiece(colour, pos) {
+        if (colour == "R") {
+          $("#gamearea li:nth-child(" + pos + ")").html('<div class="circle-red"></div>');
+        } else if (colour == "W") {
+          $("#gamearea li:nth-child(" + pos + ")").html('<div class="circle-yellow"></div>');
+        }
+      }
 
-  var args = {
-    bot1: {
-      userid: leftbot.split("-")[0].substring(1),
-      botid: leftbot.split("-")[1],
-    },
-    bot2: {
-      userid: rightbot.split("-")[0].substring(1),
-      botid: rightbot.split("-")[1],
-    }
-  }
+      function fillBoard() {
+        var steps = CURRENT_BOARD;
+        for (var i = 0; i < steps.length; i++) {
+          var s = steps[i];
+          var rows = s.split('\n');
+          for (var x = 0; x < rows.length; x++) {
+            var points = rows[x].split(',');
+            for (var y = 0;  y < points.length; y++) {
+              if (points[y] != "_") {
+                drawPiece(points[y], (((x * 7) + y)+1));
+                //$("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").html(points[y]);
+              }  
+            }
+          }
+        };        
+      }
 
-  $.ajax({
-    url: C4_API + '/play',
-    type: 'POST',
-    data: JSON.stringify(args),
-    contentType: "application/json",
-    dataType: "json",
-    success: function(data){
+      $("#letsplay").click(function(event){
+        event.preventDefault();
+
+        // Hide bot selector
+        $("#botselector").hide();
+        $("#gamearea").show();
+
+        var leftbot = $('#leftbot .in').parent().find('h4.panel-title a').attr('href');
+        var rightbot = $('#rightbot .in').parent().find('h4.panel-title a').attr('href');
+
+        var args = {
+          bot1: {
+            userid: leftbot.split("-")[0].substring(1),
+            botid: leftbot.split("-")[1],
+          },
+          bot2: {
+            userid: rightbot.split("-")[0].substring(1),
+            botid: rightbot.split("-")[1],
+          }
+        }
+
+        $.ajax({
+          url: C4_API + '/play',
+          type: 'POST',
+          data: JSON.stringify(args),
+          contentType: "application/json",
+          dataType: "json",
+          success: function(data){
             //console.log(data);
 
             // The grid of doomsday.
-            var steps = data['steps'];
-            for (var i = 0; i < steps.length; i++) {
-              var s = steps[i];
-              var rows = s.split('\n');
-              for (var x = 0; x < rows.length; x++) {
-                var points = rows[x].split(',');
-                for (var y = 0;  y < points.length; y++) {
-                  if (points[y] != "_") {
-                    $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").html(points[y]);
-                    if (points[y] == "R"){
-                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color', 'red');
-                    } else if (points[y] == "W"){
-                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color', 'yellow');
-                    } else {
-                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color', 'white');
-                    }
-                    
-                  }  
-                }
-              }
-            };
+            CURRENT_BOARD = data['steps'];
+            fillBoard();
 
             // display winner details
             if (!data['winner']) {
@@ -471,25 +550,30 @@ $("#letsplay").click(function(event){
             
           }
         });
-});
+      });
+      $("#pickdifferent").click(function(event){
+        event.preventDefault();
+        appLogin();
 
-$("#newbot-btn").click(function(event){
-  event.preventDefault();
+      });
 
-  var args = {
-    userid: CURRENT_USER,
-    bot_name: $("#newbot-name").val(),
-    bot: $("#newbot-code").val(),
-    lang: $("#newbot-type").val(),
-  }
+      $("#newbot-btn").click(function(event){
+        event.preventDefault();
 
-  $.ajax({
-    url: C4_API + '/submit_bot',
-    type: 'POST',
-    data: JSON.stringify(args),
-    contentType: "application/json",
-    dataType: "json",
-    success: function(data){
+        var args = {
+            userid: CURRENT_USER,
+            bot_name: $("#newbot-name").val(),
+            bot: $("#newbot-code").val(),
+            lang: $("#newbot-type").val(),
+          }
+
+        $.ajax({
+          url: C4_API + '/submit_bot',
+          type: 'POST',
+          data: JSON.stringify(args),
+          contentType: "application/json",
+          dataType: "json",
+          success: function(data){
             //...
             console.log(data);
             console.log("submitted");
@@ -505,7 +589,7 @@ $("#newbot-btn").click(function(event){
           } 
         });
 
-});
+      });
 
       // Not very efficient, but works...
       $('#leftbot').on('shown.bs.collapse', function () {
@@ -523,6 +607,6 @@ $("#newbot-btn").click(function(event){
         $("#newbot-error").hide();
       });
 
-      </script>
-    </body>
-    </html>
+    </script>
+  </body>
+</html>
