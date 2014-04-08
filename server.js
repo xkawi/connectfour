@@ -438,7 +438,7 @@ function login(req, res, next) {
 	var data = req.body;
 	userid = data.userid; //change to fbid
 	name = data.name;
-	console.log('request data for login: ', data);
+	console.log('request data for login: ', data)
 	/*
 	{
 		'userid': 'userid',

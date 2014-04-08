@@ -54,7 +54,7 @@
     float: left;
     width: 14%;
     height: 3em;
-    background-color: red;
+    background-color: white;
     margin: 1px;
   }
 
@@ -426,6 +426,14 @@ $("#letsplay").click(function(event){
                 for (var y = 0;  y < points.length; y++) {
                   if (points[y] != "_") {
                     $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").html(points[y]);
+                    if (points[y] == "R"){
+                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color': 'red');
+                    } else if (points[y] == "W"){
+                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color': 'yellow');
+                    } else {
+                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color': 'white');
+                    }
+                    
                   }  
                 }
               }
