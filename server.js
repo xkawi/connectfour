@@ -16,6 +16,7 @@ var server = restify.createServer({
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.use(restify.CORS());
+//server.use(ecstatic({ root: __dirname + '/' }));
 
 /*======LOGIN RELATED FUNCTIONS=====*/
 function findByEmail(uid, fn) {
@@ -464,6 +465,8 @@ function leaderboard(req, res, next) {
 function submit_bot(req, res, next) {
 	req.header('application/json');
 	var jsonform = req.body;
+
+	console.log(jsonform);
 	//console.log("req.body:", jsonform, typeof jsonform);
 	bot = jsonform.bot; // move function in text (example of value: 'return Math.floor((Math.random()*7))' )
 	lang = jsonform.lang; // programming language (example: 'js')
@@ -782,9 +785,9 @@ server.get('/test', function(req, res, next){
 })
 
 //SERVE STATIC/PUBLIC FILE
-server.get('/', restify.serveStatic({
-	directory: './public',
-	default: 'index.html'
+server.get('/?.*/', restify.serveStatic({
+  directory: './public',
+  default: 'index.html'
 }));
 
 //RUN APPLICATION

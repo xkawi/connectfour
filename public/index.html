@@ -1,300 +1,502 @@
-<h1 id="how-to-play">Let's Play Connect4!</h1>
-<p>
-Go to this <a href="#">link</a> to access the game. This page is the backend server.
-<br/>
-the game rule is, well... just like Connect4!
-<br/>
-Your task is to create a bot or Artificial Intelligence that can play Connect4 automatically. Your bot will play against a bot that you select. The stronger your opponent, the higher the score that you will get!
-<br/>
-Here are pre-defined methods with default code for both Python and JavaScript that you have to complete:
-</p>
-<p>Python Code:</p>
-<pre><code>def move(board):
-    # start your code here
-    # must return integer which is the column index
-    return randint(0,6);
-</code></pre>
 
-<p>JavaScript Code:</p>
-<pre><code>
-function  move(board){
-    # start your code here
-    # must return integer which is the column index
-    return Math.floor(Math.random()*6)
-}</code></pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="shortcut icon" href="http://getbootstrap.com/assets/ico/favicon.ico">
 
+  <title>Cover Template for Bootstrap</title>
 
-<p>
-Here is the Data Structure of the Board to help you write your bot, it is a 2D array - 6 columns and 7 rows:</p>
-<pre><code>
-[ ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ] ]
-</code></pre>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 
-<p>Here are some rules that you should follow:
-    <ul>
-        <li>in every step, the bot should return an integer, which is the column index</li>
-        <li>you must login using facebook first in order to submit code</li>
-    </ul>
-<br/>
-Last but not least, Happy Playing!!!
-</p>
+  <!-- Custom styles for this template -->
+  <link href="http://getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
+  <!--<link href="style.css" rel="stylesheet">-->
 
-<h1 id="api-docs">API Docs</h1>
-<h3 id="get-index">GET /index</h3>
-<p><strong>Request</strong>: nil</p>
-<p><strong>Response</strong>: Array of bots in JSON format</p>
-<pre><code>[
-    {
-        'userid': '123114125545345',
-        'bot': {
-            'id': 0,
-            'code': 'return Math.floor(Math.random()*7);',
-            'name': 'Bot0',
-            'lang': 'js',
-            'score': 800,
-            'win': 2,
-            'lose': 1
+  <style type="text/css">
+  #botselector pre {
+    text-align: left;
+  }
+
+  #botselector .stats {
+    float: right;
+  }
+
+  #botselector .panel-title {
+    text-align: left;
+  }
+
+  #botselector .panel-heading {
+    background-image: none;
+  }
+
+  #botselector .panel-heading.lang-python {
+    background-color: #366e9c;
+    color: #fff;
+  }
+
+  #botselector .panel-heading.lang-js {
+    background-color: #f0db4f;  
+  }
+
+  #gamearea ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  #gamearea ul li {
+    display: block;
+    float: left;
+    width: 14%;
+    height: 3em;
+    background-color: red;
+    margin: 1px;
+  }
+
+  .cover-container {
+    width: 800px;
+  }
+  </style>
+
+  <!-- Just for debugging purposes. Don't actually copy this line! -->
+  <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    </head>
+
+    <body>
+      <div id="fb-root"></div>
+      <div class="site-wrapper">
+
+        <div class="site-wrapper-inner">
+
+          <div class="cover-container">
+
+            <div class="masthead clearfix">
+              <div class="inner">
+                <h3 class="masthead-brand">Connect 4</h3>
+                <ul class="nav masthead-nav">
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="#" data-toggle="modal" data-target="#leaderboardModal">Leaderboard</a></li>
+                  <li><a href="#" data-toggle="modal" data-target="#submitModal">Submit New Bot</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="inner cover">
+              <h1 id="screentitle" class="cover-heading">Welcome to Connect 4</h1>
+              <p id="caption" class="lead">You can login to our awesome game via Facebook!</p>
+              <p class="lead">
+                <div id="fbconnect-btn">
+                  <fb:login-button show-faces="false" size="xlarge"></fb:login-button>
+                </div>
+                <div class="result"></div>
+                <div id="gamearea">
+                  <ul>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    
+                  </ul>
+                  <p id="winner-msg">
+                    Winner message goes here
+                  </p>
+                </div>
+                <div id="botselector">
+
+                  <!-- accordian start -->
+                  <div class="panel-group col-md-6" id="leftbot">
+
+                  </div>
+                  <!-- accordian end -->
+
+                  <!-- accordian start -->
+                  <div class="panel-group col-md-6" id="rightbot">
+
+                  </div>
+                  <!-- accordian end -->
+
+                  <div class="col-md-12">
+                    You have selected:
+                    <p id="botlineup">#leftbot vs #rightbot</p>
+                    <a id="letsplay" href="#" class="btn btn-primary btn-lg" role="button">Let's play Connect 4!</a>
+                  </div>
+                </div>
+              </p>
+            </div>
+
+            <div class="mastfoot">
+              <div class="inner">
+                <p>Connect 4, by <a href="https://github.com/Dino198">Dino198</a>, <a href="https://github.com/neoborn">neoborn</a>, <a href="https://github.com/erwinhuang1612">erwinhuang1612</a> and <a href="https://github.com/kelvinnn/">kelvinnn</a>.</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Leaderboard Modal -->
+      <div class="modal fade" id="leaderboardModal" tabindex="-1" role="dialog" aria-labelledby="leaderboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="leaderboardModalLabel">Leaderboard</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <tr>
+                  <th>User ID</th>
+                  <th>Bot ID</th>
+                  <th>Language</th>
+                  <th>Wins</th>
+                  <th>Losses</th>
+                  <th>Score</th>
+                </tr>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Modal -->
+      <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="submitModalLabel">Submit New Bot</h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal" role="form">
+                <div class="form-group">
+                  <label for="newbot-name" class="col-sm-3 control-label">Bot Name</label>
+                  <div class="col-sm-9">
+                    <input name="newbot-name" type="text" class="form-control" id="newbot-name" placeholder="Your Bot's Name">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="newbot-type" class="col-sm-3 control-label">Language</label>
+                  <div class="col-sm-9">
+                    <select name="newbot-type" id="newbot-type" class="form-control">
+                      <option value="js">JavaScript</option>
+                      <option value="python">Python</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="newbot-code" class="col-sm-3 control-label">Raw Bot Code</label>
+                  <span id="newbot-error" class="label label-danger">Error message goes here!</span>
+                  <div class="col-sm-9">
+                    <textarea name="newbot-code" id="newbot-code" class="form-control" rows="3"></textarea>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button id="newbot-btn" type="button" class="btn btn-primary">Submit New Bot</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="http://getbootstrap.com/assets/js/docs.min.js"></script>
+
+    <script>
+
+    var C4_API = "http://cloud-connectfour.herokuapp.com";
+    var CURRENT_USER = "";
+
+    appStartup();
+
+      // Facebook Connect Stuff 
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1433430370237330',
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+
+        FB.Event.subscribe('auth.authResponseChange', function(response) {
+          if (response.status === 'connected') {
+          //testAPI();
+          appLogin();
+        } else if (response.status === 'not_authorized') {
+          FB.login();
+        } else {
+          FB.login();
         }
+      });
+      };
+
+      // Load the SDK asynchronously
+      (function(d){
+       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       ref.parentNode.insertBefore(js, ref);
+     }(document));
+
+      // Test function
+      function testAPI() {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function(response) {
+          console.log('Good to see you, ' + response.name + '.');
+        });
+      }
+
+      function appStartup() {
+        $("#botselector").hide();
+      }
+
+      function appLogin() {
+        FB.api('/me', function(response) {
+          //console.log('Good to see you, ' + response.name + '.');
+          console.log('appLogin fired. Logging in with ' + response.id);
+          $("#screentitle").html("Pick some bots and we'll play!");
+          $("#caption").html("Oh hello again, " + response.name + ". We really missed you...");
+          CURRENT_USER = response.id;
+          // Call /login with FBID
+          $.post(C4_API + "/login", {
+            userid: response.id
+          }, function(data) {
+            //alert("result gotten" + data);
+            // Hide FB connect button
+            $("#fbconnect-btn").hide();
+
+            $(".result").html(data);
+            appBotList(data);
+          });
+        });
+      }
+
+      function appBotList(data) {
+        $.getJSON(C4_API + "/index", function(bots) {
+          
+          // Wipe list!
+          $('#leftbot').empty();
+          $('#rightbot').empty();
+
+          $.each(bots, function(index, value) {
+            // Populate lists
+            var active = "";
+            if (index == 0) {
+              active = " in";
+            }
+            $('#leftbot').append('<div class="panel panel-default"><div class="panel-heading lang-' + value.bot.lang + '"><h4 class="panel-title"><span class="label label-info">' + value.bot.score + '</span> <a data-toggle="collapse" data-parent="#leftbot" href="#' + value.userid + '-' + value.bot.id + '-left">' + value.userid + ' - ' + value.bot.name + '</a><span class="stats"><span class="label label-success">' + value.bot.win + '</span><span class="label label-danger">' + value.bot.lose + '</span></span></h4></div><div id="' + value.userid + '-' + value.bot.id + '-left" class="panel-collapse collapse' + active + '"><div class="panel-body"><pre>' + value.bot.code + '</pre></div></div></div>');
+
+            $('#rightbot').append('<div class="panel panel-default"><div class="panel-heading lang-' + value.bot.lang + '"><h4 class="panel-title"><span class="label label-info">' + value.bot.score + '</span> <a data-toggle="collapse" data-parent="#rightbot" href="#' + value.userid + '-' + value.bot.id + '-right">' + value.userid + ' - ' + value.bot.name + '</a><span class="stats"><span class="label label-success">' + value.bot.win + '</span><span class="label label-danger">' + value.bot.lose + '</span></span></h4></div><div id="' + value.userid + '-' + value.bot.id + '-right" class="panel-collapse collapse' + active + '"><div class="panel-body"><pre>' + value.bot.code + '</pre></div></div></div>');
+          });
+selectBot();
+});
+
+
+$("#botselector").show();
+
+}
+
+$('#leaderboardModal').on('show.bs.modal', function (e) {
+        // Get new leaderboard stats
+        $.getJSON(C4_API + "/leaderboard", function(bots) {
+          $("#leaderboardModal table tr:gt(0)").remove();
+          $.each(bots, function(index, value) {
+            $("#leaderboardModal table").append('<tr><td>' + value.userid + '</td><td>' + value.bot.id + '</td><td>' + value.bot.lang + '</td><td>' + value.bot.win + '</td><td>' + value.bot.lose + '</td><td>' + value.bot.score + '</td></tr>');
+          });
+        });
+      });
+
+function selectBot(){
+  $('#botlineup').html($('#leftbot .in').parent().find('h4.panel-title a').text() + " vs " + $('#rightbot .in').parent().find('h4.panel-title a').text());
+}
+
+$("#letsplay").click(function(event){
+  event.preventDefault();
+  var leftbot = $('#leftbot .in').parent().find('h4.panel-title a').attr('href');
+  var rightbot = $('#rightbot .in').parent().find('h4.panel-title a').attr('href');
+
+  var args = {
+    bot1: {
+      userid: leftbot.split("-")[0].substring(1),
+      botid: leftbot.split("-")[1],
     },
-    {
-        'userid': '19823712364987',
-        'bot': {
-            'id': 0,
-            'code': 'return randint(0, 6)',
-            'name': 'Bot0',
-            'lang': 'js',
-            'score': 800,
-            'win': 0,
-            'lose': 0
-        }
+    bot2: {
+      userid: rightbot.split("-")[0].substring(1),
+      botid: rightbot.split("-")[1],
     }
-]
-</code></pre>
-<h3 id="post-login">POST /login</h3>
-<p><strong>Request</strong>:</p>
-<p>x-www-form-urlencoded</p>
-<pre><code>email - the email that the user type in (or facebook email)
+  }
 
-userid - can be the facebook ID of the user or any unique string
-</code></pre>
+  $.ajax({
+    url: C4_API + '/play',
+    type: 'POST',
+    data: JSON.stringify(args),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(data){
+            //console.log(data);
 
-<p><strong>Response</strong>:</p>
-<p>New User (example)</p>
-<pre><code>{
-    id: "the fbid being sent"
-    email: "hello@hello.com,
-    bots: [
-        {
-            code: "return randint(0,6)"
-            id: 0
-            lang: "js"
-            lose: 0
-            name: "Bot0"
-            score: 800
-            win: 0
-        }
-    ]
-}
-</code></pre>
-<p>Existing User (example)</p>
-<pre><code>{
-    id: 123,
-    email: "hello@hello.com"
-    bots: [
-        {
-            code: "return Math.floor(Math.random()*6);"
-            id: 1
-            lang: "js"
-            lose: 0
-            name: "Bot1"
-            score: 800
-            win: 0
-        },
-        {
-            code: "return randint(0,6)"
-            id: 2
-            lang: "python"
-            lose: 10
-            name: "Bot2"
-            score: 800
-            win: 11
-        }
-    ]   
-}
-</code></pre>
-<h3 id="get-leaderboard">GET /leaderboard</h3>
-<p><strong>Request</strong>: nil</p>
-<p><strong>Response</strong>: Array of bots with its respective userid in JSON format</p>
-<pre><code>[
-    {
-        "userid":"bob",
-        "bot": {
-            "code": "return randint(0,6)",
-            "id":0,
-            "lang":"python",
-            "lose":11,
-            "name":
-            "anotherUser's Bot",
-            "score":1000,
-            "win":11
-        }
-    },
-    {
-        "userid": "1234567",
-        "bot": {
-            "code":"return randint(0,6)",
-            "id":0,
-            "lang":"js",
-            "lose":0,
-            "name":"Bot0",
-            "score":800,
-            "win":0
-        }
-    },
-    {
-        "userid":"kawi",
-        "bot": {
-            "code":"return randint(0,6)",
-            "id":2,
-            "lang":"python",
-            "lose":10,
-            "name":"Bot2",
-            "score":800,
-            "win":11
-        }
-    },
-    {
-        "userid":"kawi",
-        "bot": {
-            "code":"return Math.floor(Math.random()*6);",
-            "id":1,
-            "lang":"js",
-            "lose":0,
-            "name":"Bot1",
-            "score":800,
-            "win":0
-        }
-    }
-]
-</code></pre>
-<h3 id="post-submit_bot">POST /submit_bot</h3>
-<p><strong>Request</strong>: </p>
-<p>type: application/json</p>
-<p>values:</p>
-<pre><code>{
-    "bot": "actual code written by the user",
-    "lang": "python or js",
-    "userid": "user id or facebook id"
-}
-</code></pre>
-<p><strong>Response</strong>:</p>
-<p>Syntax Error (JSON):</p>
-<pre><code>{"success": false, "error": "invalid syntax"}
-</code></pre>
-<p>Bad Move (JSON):</p>
-<pre><code>{"success": false, "error": "bot cause invalid move"}
-</code></pre>
-<p>Success (JSON):</p>
-<pre><code>{
-    "success": true,
-    "error": null,
-    "bot": {
-        'code': code,
-        'id': 0,
-        'lang': lang,
-        'name': "Bot0",
-        'score': 800,
-        'win': 0,
-        'lose': 0
-    }
-}
-</code></pre>
-<h3 id="post-edit_bot">POST /edit_bot</h3>
-<p><strong>Request</strong>: </p>
-<p>type: application/json</p>
-<p>values:</p>
-<pre><code>{
-    "bot": "actual code written by the user",
-    "lang": "python or js",
-    "userid": "user id or facebook id",
-    "bot_id": 0
-}
-</code></pre>
-<p><strong>Response</strong>:</p>
-<p>Syntax Error (JSON):</p>
-<pre><code>{"success": false, "error": "invalid syntax"}
-</code></pre>
-<p>Bad Move (JSON):</p>
-<pre><code>{"success": false, "error": "bot cause invalid move"}
-</code></pre>
-<p>Success (JSON):</p>
-<pre><code>{
-    "success": true,
-    "error": null,
-    "bot": {
-        'code': code,
-        'id': 0,
-        'lang': lang,
-        'name': "Bot0",
-        'score': 800,
-        'win': 0,
-        'lose': 0
-    }
-}
-</code></pre>
-<h3 id="post-play">POST /play</h3>
-<p><strong>Request</strong>: </p>
-<p>type: application/json</p>
-<p>value:</p>
-<pre><code>{
-    "bot1": {
-        "userid": "kawi",
-        "botid": "1"
-    },
-    "bot2": {
-        "userid": "bob",
-        "botid": "0"
-    }
-}
-</code></pre>
-<p><strong>Response</strong>:</p>
-<pre><code>{
-    "winner":"",
-    "bad_move":"bot2",
-    "steps":[
-        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n",
-        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n",
-        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,R,_,_,_,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,R,_,R,_,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,R,_,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,_,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,W,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,W,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,W,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,W,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,W,_,\n_,R,_,R,W,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,W,_,\nR,R,_,R,W,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,W,W,_,\nR,R,_,R,W,W,_,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,W,_,_,\n_,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,W,_,_,\nR,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\nW,R,_,_,W,_,_,\nR,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\nW,R,_,R,W,_,_,\nR,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\nW,W,_,_,_,_,_,\nW,R,_,R,W,_,_,\nR,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\nW,W,_,_,_,_,_,\nW,R,_,R,W,_,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,_,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
-        "_,_,_,_,_,_,_,\n_,R,_,W,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
-        "_,_,_,R,_,_,_,\n_,R,_,W,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
-        "_,_,_,R,_,_,_,\nW,R,_,W,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
-        "R,_,_,R,_,_,_,\nW,R,_,W,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
-        "R,_,_,R,_,_,_,\nW,R,_,W,_,_,_,\nW,W,_,W,_,W,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
-        "R,_,_,R,_,_,_,\nW,R,_,W,_,_,_,\nW,W,_,W,_,W,_,\nW,R,_,R,W,R,_,\nR,W,R,R,W,W,_,\nR,R,R,R,W,W,R,\n"
-    ]
-}
-</code></pre>
+            // The grid of doomsday.
+            var steps = data['steps'];
+            for (var i = 0; i < steps.length; i++) {
+              var s = steps[i];
+              var rows = s.split('\n');
+              for (var x = 0; x < rows.length; x++) {
+                var points = rows[x].split(',');
+                for (var y = 0;  y < points.length; y++) {
+                  if (points[y] != "_") {
+                    $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").html(points[y]);
+                  }  
+                }
+              }
+            };
+
+            // display winner details
+            if (!data['winner']) {
+              console.log("this is fired");
+              if (!data['bad_move']) {
+                // tie
+                console.log("tie");
+                $("#winner-msg").html("The game has ended in a tie. No more moves are possible!"); 
+              } else {
+                // bad move
+                console.log("bad move");
+                $("#winner-msg").html("User " + data['bad_move']['userid'] + ", bot " + data['bad_move']['botid'] + " has made a bad move. Game is aborted."); 
+              }
+              
+            } else {
+              console.log("winner found");
+              $("#winner-msg").html("The winner is user " + data['winner']['userid'] + ", bot " + deal['winner']['botid']);  
+            }
+            
+          }
+        });
+});
+
+$("#newbot-btn").click(function(event){
+  event.preventDefault();
+
+  var args = {
+    userid: CURRENT_USER,
+    bot_name: $("#newbot-name").val(),
+    bot: $("#newbot-code").val(),
+    lang: $("#newbot-type").val(),
+  }
+
+  $.ajax({
+    url: C4_API + '/submit_bot',
+    type: 'POST',
+    data: JSON.stringify(args),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(data){
+            //...
+            console.log(data);
+            console.log("submitted");
+            if (data.success == true) {
+              $("#submitModal").modal('hide');
+              appLogin();
+            } else {
+              // error with bot code
+              $("#newbot-error").html(data.error);
+              $("#newbot-error").show();
+
+            }
+          } 
+        });
+
+});
+
+      // Not very efficient, but works...
+      $('#leftbot').on('shown.bs.collapse', function () {
+        // Update bot lineup
+        selectBot();
+      });
+
+      $('#rightbot').on('shown.bs.collapse', function () {
+        // Update bot lineup
+        selectBot();
+      });
+
+      $('#submitModal').on('show.bs.modal', function () {
+        // Update bot lineup
+        $("#newbot-error").hide();
+      });
+
+      </script>
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-49803980-1', 'cloud-connectfour.herokuapp.com');
+      ga('send', 'pageview');
+
+      </script>
+    </body>
+    </html>

@@ -1,0 +1,300 @@
+<h1 id="how-to-play">Let's Play Connect4!</h1>
+<p>
+Go to this <a href="#">link</a> to access the game. This page is the backend server.
+<br/>
+the game rule is, well... just like Connect4!
+<br/>
+Your task is to create a bot or Artificial Intelligence that can play Connect4 automatically. Your bot will play against a bot that you select. The stronger your opponent, the higher the score that you will get!
+<br/>
+Here are pre-defined methods with default code for both Python and JavaScript that you have to complete:
+</p>
+<p>Python Code:</p>
+<pre><code>def move(board):
+    # start your code here
+    # must return integer which is the column index
+    return randint(0,6);
+</code></pre>
+
+<p>JavaScript Code:</p>
+<pre><code>
+function  move(board){
+    # start your code here
+    # must return integer which is the column index
+    return Math.floor(Math.random()*6)
+}</code></pre>
+
+
+<p>
+Here is the Data Structure of the Board to help you write your bot, it is a 2D array - 6 columns and 7 rows:</p>
+<pre><code>
+[ ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+  ["_", "_" , "_" , "_" , "_" , "_" , "_" ] ]
+</code></pre>
+
+<p>Here are some rules that you should follow:
+    <ul>
+        <li>in every step, the bot should return an integer, which is the column index</li>
+        <li>you must login using facebook first in order to submit code</li>
+    </ul>
+<br/>
+Last but not least, Happy Playing!!!
+</p>
+
+<h1 id="api-docs">API Docs</h1>
+<h3 id="get-index">GET /index</h3>
+<p><strong>Request</strong>: nil</p>
+<p><strong>Response</strong>: Array of bots in JSON format</p>
+<pre><code>[
+    {
+        'userid': '123114125545345',
+        'bot': {
+            'id': 0,
+            'code': 'return Math.floor(Math.random()*7);',
+            'name': 'Bot0',
+            'lang': 'js',
+            'score': 800,
+            'win': 2,
+            'lose': 1
+        }
+    },
+    {
+        'userid': '19823712364987',
+        'bot': {
+            'id': 0,
+            'code': 'return randint(0, 6)',
+            'name': 'Bot0',
+            'lang': 'js',
+            'score': 800,
+            'win': 0,
+            'lose': 0
+        }
+    }
+]
+</code></pre>
+<h3 id="post-login">POST /login</h3>
+<p><strong>Request</strong>:</p>
+<p>x-www-form-urlencoded</p>
+<pre><code>email - the email that the user type in (or facebook email)
+
+userid - can be the facebook ID of the user or any unique string
+</code></pre>
+
+<p><strong>Response</strong>:</p>
+<p>New User (example)</p>
+<pre><code>{
+    id: "the fbid being sent"
+    email: "hello@hello.com,
+    bots: [
+        {
+            code: "return randint(0,6)"
+            id: 0
+            lang: "js"
+            lose: 0
+            name: "Bot0"
+            score: 800
+            win: 0
+        }
+    ]
+}
+</code></pre>
+<p>Existing User (example)</p>
+<pre><code>{
+    id: 123,
+    email: "hello@hello.com"
+    bots: [
+        {
+            code: "return Math.floor(Math.random()*6);"
+            id: 1
+            lang: "js"
+            lose: 0
+            name: "Bot1"
+            score: 800
+            win: 0
+        },
+        {
+            code: "return randint(0,6)"
+            id: 2
+            lang: "python"
+            lose: 10
+            name: "Bot2"
+            score: 800
+            win: 11
+        }
+    ]   
+}
+</code></pre>
+<h3 id="get-leaderboard">GET /leaderboard</h3>
+<p><strong>Request</strong>: nil</p>
+<p><strong>Response</strong>: Array of bots with its respective userid in JSON format</p>
+<pre><code>[
+    {
+        "userid":"bob",
+        "bot": {
+            "code": "return randint(0,6)",
+            "id":0,
+            "lang":"python",
+            "lose":11,
+            "name":
+            "anotherUser's Bot",
+            "score":1000,
+            "win":11
+        }
+    },
+    {
+        "userid": "1234567",
+        "bot": {
+            "code":"return randint(0,6)",
+            "id":0,
+            "lang":"js",
+            "lose":0,
+            "name":"Bot0",
+            "score":800,
+            "win":0
+        }
+    },
+    {
+        "userid":"kawi",
+        "bot": {
+            "code":"return randint(0,6)",
+            "id":2,
+            "lang":"python",
+            "lose":10,
+            "name":"Bot2",
+            "score":800,
+            "win":11
+        }
+    },
+    {
+        "userid":"kawi",
+        "bot": {
+            "code":"return Math.floor(Math.random()*6);",
+            "id":1,
+            "lang":"js",
+            "lose":0,
+            "name":"Bot1",
+            "score":800,
+            "win":0
+        }
+    }
+]
+</code></pre>
+<h3 id="post-submit_bot">POST /submit_bot</h3>
+<p><strong>Request</strong>: </p>
+<p>type: application/json</p>
+<p>values:</p>
+<pre><code>{
+    "bot": "actual code written by the user",
+    "lang": "python or js",
+    "userid": "user id or facebook id"
+}
+</code></pre>
+<p><strong>Response</strong>:</p>
+<p>Syntax Error (JSON):</p>
+<pre><code>{"success": false, "error": "invalid syntax"}
+</code></pre>
+<p>Bad Move (JSON):</p>
+<pre><code>{"success": false, "error": "bot cause invalid move"}
+</code></pre>
+<p>Success (JSON):</p>
+<pre><code>{
+    "success": true,
+    "error": null,
+    "bot": {
+        'code': code,
+        'id': 0,
+        'lang': lang,
+        'name': "Bot0",
+        'score': 800,
+        'win': 0,
+        'lose': 0
+    }
+}
+</code></pre>
+<h3 id="post-edit_bot">POST /edit_bot</h3>
+<p><strong>Request</strong>: </p>
+<p>type: application/json</p>
+<p>values:</p>
+<pre><code>{
+    "bot": "actual code written by the user",
+    "lang": "python or js",
+    "userid": "user id or facebook id",
+    "bot_id": 0
+}
+</code></pre>
+<p><strong>Response</strong>:</p>
+<p>Syntax Error (JSON):</p>
+<pre><code>{"success": false, "error": "invalid syntax"}
+</code></pre>
+<p>Bad Move (JSON):</p>
+<pre><code>{"success": false, "error": "bot cause invalid move"}
+</code></pre>
+<p>Success (JSON):</p>
+<pre><code>{
+    "success": true,
+    "error": null,
+    "bot": {
+        'code': code,
+        'id': 0,
+        'lang': lang,
+        'name': "Bot0",
+        'score': 800,
+        'win': 0,
+        'lose': 0
+    }
+}
+</code></pre>
+<h3 id="post-play">POST /play</h3>
+<p><strong>Request</strong>: </p>
+<p>type: application/json</p>
+<p>value:</p>
+<pre><code>{
+    "bot1": {
+        "userid": "kawi",
+        "botid": "1"
+    },
+    "bot2": {
+        "userid": "bob",
+        "botid": "0"
+    }
+}
+</code></pre>
+<p><strong>Response</strong>:</p>
+<pre><code>{
+    "winner":"",
+    "bad_move":"bot2",
+    "steps":[
+        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n",
+        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n",
+        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,R,_,_,_,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,R,_,R,_,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,R,_,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,_,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,W,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,W,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,_,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,W,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,_,_,\n_,R,_,R,W,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,W,_,\n_,R,_,R,W,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,_,W,_,\nR,R,_,R,W,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,W,W,_,\nR,R,_,R,W,W,_,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,W,_,_,\n_,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\n_,R,_,_,W,_,_,\nR,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\nW,R,_,_,W,_,_,\nR,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\n_,W,_,_,_,_,_,\nW,R,_,R,W,_,_,\nR,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\nW,W,_,_,_,_,_,\nW,R,_,R,W,_,_,\nR,W,_,R,W,W,_,\nR,R,_,R,W,W,R,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\nW,W,_,_,_,_,_,\nW,R,_,R,W,_,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,_,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,_,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
+        "_,_,_,_,_,_,_,\n_,R,_,W,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
+        "_,_,_,R,_,_,_,\n_,R,_,W,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
+        "_,_,_,R,_,_,_,\nW,R,_,W,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
+        "R,_,_,R,_,_,_,\nW,R,_,W,_,_,_,\nW,W,_,W,_,_,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
+        "R,_,_,R,_,_,_,\nW,R,_,W,_,_,_,\nW,W,_,W,_,W,_,\nW,R,_,R,W,R,_,\nR,W,_,R,W,W,_,\nR,R,R,R,W,W,R,\n",
+        "R,_,_,R,_,_,_,\nW,R,_,W,_,_,_,\nW,W,_,W,_,W,_,\nW,R,_,R,W,R,_,\nR,W,R,R,W,W,_,\nR,R,R,R,W,W,R,\n"
+    ]
+}
+</code></pre>
