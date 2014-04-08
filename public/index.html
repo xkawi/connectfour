@@ -427,11 +427,11 @@ $("#letsplay").click(function(event){
                   if (points[y] != "_") {
                     $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").html(points[y]);
                     if (points[y] == "R"){
-                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color': 'red');
+                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color', 'red');
                     } else if (points[y] == "W"){
-                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color': 'yellow');
+                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color', 'yellow');
                     } else {
-                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color': 'white');
+                      $("#gamearea li:nth-child(" + (((x * 7) + y)+1) + ")").css('color', 'white');
                     }
                     
                   }  
