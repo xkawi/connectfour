@@ -89,6 +89,15 @@
 
     <body>
       <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=238729719666675";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+      <div id="fb-root"></div>
       <div class="site-wrapper">
 
         <div class="site-wrapper-inner">
@@ -103,9 +112,12 @@
                   <li><a href="#" data-toggle="modal" data-target="#leaderboardModal">Leaderboard</a></li>
                   <li><a href="#" data-toggle="modal" data-target="#submitModal">Submit New Bot</a></li>
                   <li> <a href="http://neoborn.github.io/connectfour/">How-To Play</a> </li>
+                  <li><div class="fb-share-button" data-href="http://cloud-connectfour.herokuapp.com/" data-type="button_count"></div></li>
                 </ul>
               </div>
             </div>
+
+
 
             <div class="inner cover">
               <h1 id="screentitle" class="cover-heading">Welcome to Connect 4</h1>
