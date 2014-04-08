@@ -297,6 +297,8 @@ var game_functions = {
 				currentData.push(bot);
 				return currentData;
 			} else {//no bot yet
+				bot.id = 0;
+				bot.name = "Bot0";
 				return [bot];
 			}
 		}, function(err, committed, snapshot){
@@ -526,9 +528,7 @@ function submit_bot(req, res, next) {
         		// otherwise update and save a revision
         		var b = {
         			'code': code,
-        			'id': 0,
         			'lang': lang,
-        			'name': "Bot0",
         			'score': 800,
         			'win': 0,
         			'lose': 0
