@@ -201,11 +201,12 @@ var game_functions = {
 			//console.log(data);
 			var bots = []
 			for (key in data) {
-				if (!data.hasOwnProperty(key) || key == 'winning_bots') {
+				if (!data.hasOwnProperty(key) || key == 'winning_bots' || key == 'bots') {
 					continue;//The current property is not a direct property	
 				}
 				var userbots = data[key]['bots'];
 				//console.log(userbots, userbots.length);
+				
 				for (var i = userbots.length - 1; i >= 0; i--) {
 					var bot = {
 						"userid": key,
@@ -213,7 +214,7 @@ var game_functions = {
 						"bot": userbots[i]
 					}
 					bots.push(bot)
-				};
+				}
 			}
 			return fn(bots);
 		});

@@ -1,39 +1,137 @@
 {
-	"kawi": {
-		"name": "Kawi",
-		"bots": [
-		{
-			"id": 0,
-			"name": "Bot0",
-			"code": "return Math.floor(Math.random()*6);",
-			"lang": "js",
-			"score": 800, 
-			"win": 0,
-			"lose": 0
-		},
-		{
-			"id": 1,
-			"name": "Bot1",
-			"code": "return randint(0,6)",
-			"lang": "python",
-			"score": 800,
-			"win": 0,
-			"lose": 0
-		}
-		]
-	},
-	"bob": {
-		"name": "Bob",
-		"bots": [
-		{
-			"id": 0,
-			"name": "anotherUser's Bot",
-			"code": "return randint(0,6)",
-			"lang": "python",
-			"score": 800,
-			"win": 0,
-			"lose": 0
-		}
-		]
-	}
+    "650816051": {
+    	"name": "David",
+        "bots": [
+            {
+                "win": 0,
+                "lang": "js",
+                "name": "Erwin's bot",
+                "code": "return Math.floor(Math.random()*6);",
+                "lose": 0,
+                "score": 800,
+                "id": 0
+            }
+        ]
+    },
+    "nero": {
+        "name": "Nero",
+        "bots": [
+            {
+                "id": 0,
+                "name": "Bot0",
+                "code": "return Math.floor(Math.random()*6);",
+                "lang": "js",
+                "score": 800,
+                "win": 0,
+                "lose": 0
+            },
+            {
+                "id": 1,
+                "name": "Bot1",
+                "code": "return randint(0,6)",
+                "lang": "python",
+                "score": 800,
+                "win": 0,
+                "lose": 0
+            }
+        ]
+    },
+    "bob": {
+        "name": "Bob",
+        "bots": [
+            {
+                "id": 0,
+                "name": "Bob's Bot",
+                "code": "return randint(0,6)",
+                "lang": "python",
+                "score": 800,
+                "win": 0,
+                "lose": 0
+            }
+        ]
+    },
+    "dre": {
+        "name": "Drake",
+        "bots": [
+            {
+                "id": 0,
+                "name": "Dre Init Bot",
+                "code": "return Math.floor(Math.random()*6);",
+                "lang": "js",
+                "score": 800,
+                "win": 0,
+                "lose": 0
+            },
+            {
+                "id": 1,
+                "name": "My Snake Bot",
+                "code": "return randint(0,6)",
+                "lang": "python",
+                "score": 800,
+                "win": 0,
+                "lose": 0
+            }
+        ]
+    },
+    "dino": {
+        "name": "Dinosaur",
+        "bots": [
+            {
+                "id": 0,
+                "name": "Bot0",
+                "code": "return Math.floor(Math.random()*6);",
+                "lang": "js",
+                "score": 800,
+                "win": 0,
+                "lose": 0
+            },
+            {
+                "id": 1,
+                "name": "Bot1",
+                "code": "for i in range(0,6):\n\tif (i%2==1): return i",
+                "lang": "python",
+                "score": 800,
+                "win": 0,
+                "lose": 0
+            }
+        ]
+    },
+    "yanyan": {
+        "name": "YanYan",
+        "bots": [
+            {
+                "id": 1,
+                "name": "Snaky Bot",
+                "code": "return randint(0,6)",
+                "lang": "python",
+                "score": 800,
+                "win": 0,
+                "lose": 0
+            }
+        ]
+    },
+    "100000221346701": {
+    	"name": "frank",
+        "bots": [
+            {
+                "win": 4,
+                "lang": "js",
+                "name": "Frank Bot",
+                "code": "return Math.floor(Math.random()*6);",
+                "lose": 3,
+                "score": 1500,
+                "id": 0
+            }
+        ]
+    },
+    "winning_bots": {
+        "-JK0hreJjzT9xaRkeT1b": {
+            "lang": "js",
+            "code": "return Math.floor(Math.random()*6);"
+        },
+        "-JK0cmSWaZFW8OjAWDkL": {
+            "lang": "python",
+            "code": "return randint(0,6)"
+        }
+    }
 }
