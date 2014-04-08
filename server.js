@@ -657,6 +657,7 @@ function edit_bot(req, res, next) {
 function play(req, res, next) {
 	req.accepts('application/json');
 	var form = req.body;
+	req.params['bot1']
 	console.log(form, typeof form);
 	game_functions.getUserBot(form.bot1['userid'], form.bot1['botid'], function(b1){
 		var bot1 = b1;
@@ -750,7 +751,7 @@ function play(req, res, next) {
 							game();
 						} catch (err) {							//catch the bad move error and stop the game
 							result.winner = '';
-							result.bad_move = count%2 == 1 ? 'bot1' : 'bot2';
+							result.bad_move = count%2 == 1 ? bot1.userid : bot2.userid;
 							end_game = true;
 							console.log("game interupted with bad move:", err.message);
 							game();
