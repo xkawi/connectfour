@@ -3,7 +3,7 @@
 		"bots": [
 		{
 			"id": 0,
-			"name": "Bot1",
+			"name": "Bot0",
 			"code": "return Math.floor(Math.random()*6);",
 			"lang": "js",
 			"score": 800, 
@@ -12,7 +12,7 @@
 		},
 		{
 			"id": 1,
-			"name": "Bot2",
+			"name": "Bot1",
 			"code": "return randint(0,6)",
 			"lang": "python",
 			"score": 800,
