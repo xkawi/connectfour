@@ -489,6 +489,7 @@ function submit_bot(req, res, next) {
 	req.header('application/json');
 	var jsonform = req.body;
 
+	res.send(true);
 	console.log(jsonform);
 	//console.log("req.body:", jsonform, typeof jsonform);
 	bot = jsonform.bot; // move function in text (example of value: 'return Math.floor((Math.random()*7))' )
