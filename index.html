@@ -1,44 +1,64 @@
-<h1 id="how-to-play">Let's Play <a href="http://cloud-connectfour.herokuapp.com/">Connect4!</a> !</h1>
-<p>
-First of all, click the link above to play the game! Once you see the homepage, just sign up using your facebook account! And then, start playing!
-<br/>
-the game rule is, well... just like Connect4!
-<br/>
-Your task is to create a bot or Artificial Intelligence that can play Connect4 automatically. Your bot will play against a bot that you select. The stronger your opponent, the higher the score that you will get!
-<br/>
-We already pre-defined the method definition for your, you just need to write the actual code, like below:
-</p>
-<p>Python Code:</p>
-<pre><code>def move(board):
-    # start your code here
-    # must return integer which is the column index
-    return randint(0,6);
-</code></pre>
+<html>
+<head>
+  <title></title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
-<p>JavaScript Code:</p>
-<pre><code>
-function  move(board){
-    # start your code here
-    # must return integer which is the column index
-    return Math.floor(Math.random()*6)
-}</code></pre>
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 
-<p>
-Here is the Data Structure of the Board to help you write your bot, it is a 2D array - 6 columns and 7 rows:</p>
-<pre><code>
-[ ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
-  ["_", "_" , "_" , "_" , "_" , "_" , "_" ] ]
-</code></pre>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
-<p>Here are some rules that you should follow:
-    <ul>
+</head>
+<body>
+  <div class="container">
+    <h1 id="how-to-play">Let's Play <a href="http://cloud-connectfour.herokuapp.com/">Connect4!</a></h1>
+    <p>
+      First of all, click the link above to play the game! Once you see the homepage, just sign up using your facebook account! And then, start playing!
+      <br/>
+      The game rule is, well... just like the board version of Connect4!
+      <br/>
+      Your task is to create a bot or Artificial Intelligence that can play Connect4 automatically. Your bot will play against a bot that you select. The stronger your opponent, the higher the score that you will get!
+      <br/>
+      We already pre-defined the method definition for your, you just need to write the actual code, like below:
+    </p>
+    <p>Python Code:</p>
+    def move(board):
+    <pre><code>
+      # write the main code here
+      return randint(0,6);
+    </code></pre>
+
+    <p>JavaScript Code:</p>
+    function move(board){
+    <pre>
+      <code>
+        // write main code here
+        return Math.floor(Math.random()*6)
+      </code>
+    </pre>
+    }
+    <br>
+  <p>
+    Here is the Data Structure of the Board to help you write your bot, it is a 2D array - 6 columns and 7 rows:</p>
+    <pre><code>
+      [ ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+      ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+      ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+      ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+      ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+      ["_", "_" , "_" , "_" , "_" , "_" , "_" ] ]
+    </code></pre>
+
+    <p>Here are some rules that you should follow:
+      <ul>
         <li>in every step, the bot should return an integer, which is the column index</li>
         <li>you must login using facebook first in order to submit code</li>
-    </ul>
-<br/>
-Last but not least, Happy Playing!!!
-</p>
+      </ul>
+      <br/>
+      Last but not least, Happy Playing!!!
+    </p>
+  </div>
+</body>
+</html>
