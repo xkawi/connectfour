@@ -501,7 +501,7 @@
         FB.api('/me', function(response) {
           //console.log('Good to see you, ' + response.name + '.');
           console.log('appLogin fired. Logging in with ' + response.id);
-          $("#screentitle").html("Pick some bots and we'll play!");
+          $("#screentitle").html("Pick some cool bots and we'll play!");
           $("#caption").html("Oh hello again, " + response.name + ". We really missed you...");
           CURRENT_USER = response.id;
           // Call /login with FBID
