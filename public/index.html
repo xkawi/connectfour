@@ -132,6 +132,15 @@
       -o-background-size: cover;
       background-size: cover;
     }
+
+    #winner-msg {
+      font-size: 24px;
+    }
+
+    #howtoModal .modal-content {
+      text-align: left;
+    }
+
     </style>
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -176,7 +185,7 @@
                   <li class="active"><a href="#">Home</a></li>
                   <li><a href="#" data-toggle="modal" data-target="#leaderboardModal">Leaderboard</a></li>
                   <li><a href="#" data-toggle="modal" data-target="#submitModal">Submit New Bot</a></li>
-                  <li> <a href="http://neoborn.github.io/connectfour/">How-To Play</a> </li>
+                  <li><a href="#" data-toggle="modal" data-target="#howtoModal">How-To Play</a> </li>
                   <li><div class="fb-share-button" data-href="http://cloud-connectfour.herokuapp.com" data-type="button_count"></div></li>
                 </ul>
               </div>
@@ -308,6 +317,69 @@
         </div>
       </div>
     </div>
+
+    <!-- Howto Modal -->
+    <div class="modal fade" id="howtoModal" tabindex="-1" role="dialog" aria-labelledby="howtoModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="howtoModalLabel">Leaderboard</h4>
+          </div>
+          <div class="modal-body">
+
+            <p>
+              First of all, click the link above to play the game! Once you see the homepage, just sign up using your facebook account! And then, start playing!
+              <br/><br/>
+              The game rule is, well... just like the board version of Connect4!
+              <br/><br/>
+              Your task is to create a bot or Artificial Intelligence that can play Connect4 automatically. Your bot will play against a bot that you select. The stronger your opponent, the higher the score that you will get!
+              <br/><br/>
+              We already pre-defined the method definition for your, you just need to write the actual code, like below:
+            </p>
+            <p>Python Code:</p>
+            def move(board):
+            <pre><code>
+              # write the main code here
+              return randint(0,6);
+            </code></pre>
+
+            <p>JavaScript Code:</p>
+            function move(board){
+            <pre>
+              <code>
+                // write main code here
+                return Math.floor(Math.random()*6)
+              </code>
+            </pre>
+            }
+            <br>
+          <p>
+            Here is the Data Structure of the Board to help you write your bot, it is a 2D array - 6 columns and 7 rows:</p>
+            <pre><code>
+              [ ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+              ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+              ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+              ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+              ["_", "_" , "_" , "_" , "_" , "_" , "_" ],
+              ["_", "_" , "_" , "_" , "_" , "_" , "_" ] ]
+            </code></pre>
+
+            <p>Here are some rules that you should follow:
+              <ul>
+                <li>in every step, the bot should return an integer, which is the column index</li>
+                <li>you must login using facebook first in order to submit code</li>
+              </ul>
+              <br/>
+              Last but not least, Happy Playing!!!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>    
 
     <!-- Submit Modal -->
     <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModalLabel" aria-hidden="true">
