@@ -338,7 +338,9 @@
               <label for="newbot-code" class="col-sm-3 control-label">Raw Bot Code</label>
               <span id="newbot-error" class="label label-danger">Error message goes here!</span>
               <div class="col-sm-9">
-                <textarea name="newbot-code" id="newbot-code" class="form-control" rows="3"></textarea>
+                <div id="code-function-header" style="text-align:left;">function move(board) {</div>
+                <textarea name="newbot-code" id="newbot-code" class="form-control" rows="3" placeholder="board format 2D array => [ [ ] ]"></textarea>
+                <div id="code-function-footer" style="text-align:left;">}</div>
               </div>
             </div>
             </form>
@@ -615,6 +617,19 @@
         // Update bot lineup
         $("#newbot-error").hide();
       });
+
+      // listen to dropdown click event
+      $('#newbot-type').change(function () {
+        if ($('#newbot-type').val() == 'python') {
+          $('#code-function-header').html('def move(board):');
+          $('#code-function-footer').html('');
+          $('#newbot-code').attr('placeholder', '')
+        } else {
+          $('#code-function-header').html('function move(board) {');
+          $('#code-function-footer').html('}');
+          $('#newbot-code').attr('placeholder', 'board format 2D array => [ [ ] ]');
+        }
+      })
 
     </script>
   </body>
